@@ -86,19 +86,19 @@ describe("Audit Engine", () => {
   // TEST 3: Already-optimal spend returns no false savings
   // ──────────────────────────────────────────────────────────────────────────
   test("returns zero savings for an already-optimal setup", () => {
-    let input = makeInput({ teamSize: 1 });
-    input = activateTool(input, "Cursor", {
+    let input = makeInput({ teamSize: 1, primaryUseCase: "data" });
+    input = activateTool(input, "Gemini", {
       plan: "Pro",
       spend: 20,
       seats: 1,
     });
 
     const result = runAudit(input);
-    const cursorAudit = result.toolAudits.find((a) => a.tool === "Cursor");
+    const geminiAudit = result.toolAudits.find((a) => a.tool === "Gemini");
 
-    expect(cursorAudit).toBeDefined();
-    expect(cursorAudit!.recommendedAction).toBe("optimal");
-    expect(cursorAudit!.savings).toBe(0);
+    expect(geminiAudit).toBeDefined();
+    expect(geminiAudit!.recommendedAction).toBe("optimal");
+    expect(geminiAudit!.savings).toBe(0);
     expect(result.totalMonthlySavings).toBe(0);
   });
 
