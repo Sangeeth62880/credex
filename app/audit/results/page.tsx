@@ -40,10 +40,15 @@ const ACTION_STYLES: Record<string, ActionColor> = {
     icon: "💡",
   },
 };
-
 export default function AuditResultsPage() {
   const [result, setResult] = useState<AuditResult | null>(null);
   const [input, setInput] = useState<AuditInput | null>(null);
+  const [summary, setSummary] = useState<string>("");
+  const [isGeneratingSummary, setIsGeneratingSummary] = useState(false);
+  const [auditId, setAuditId] = useState<string | null>(null);
+  const [email, setEmail] = useState("");
+  const [isSubmittingLead, setIsSubmittingLead] = useState(false);
+  const [leadSuccess, setLeadSuccess] = useState(false);
   const [mounted, setMounted] = useState(false);
   const searchParams = useSearchParams();
 
@@ -60,6 +65,76 @@ export default function AuditResultsPage() {
       }
     }
   }, []);
+
+  // Save audit automatically
+  useEffect(() => {
+    if (result && input && !auditId) {
+      const saveAudit = async () => {
+        try {
+          const res = await fetch("/api/save-audit", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ input, result }),
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.id) setAuditId(data.id);
+          }
+        } catch (e) {
+          console.error("Error saving audit", e);
+        }
+      };
+      saveAudit();
+    }
+  }, [result, input, auditId]);
+
+  useEffect(() => {
+    if (result && input && !summary && !isGeneratingSummary) {
+      const fetchSummary = async () => {
+        setIsGeneratingSummary(true);
+        try {
+          const res = await fetch("/api/generate-summary", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ input, result }),
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.summary) {
+              setSummary(data.summary);
+            }
+          }
+        } catch (e) {
+          console.error("Error fetching summary", e);
+        } finally {
+          setIsGeneratingSummary(false);
+        }
+      };
+      fetchSummary();
+    }
+  }, [result, input, summary, isGeneratingSummary]);
+
+  const handleLeadCapture = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email) return;
+    setIsSubmittingLead(true);
+    try {
+      const res = await fetch("/api/capture-lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, auditId }),
+      });
+      if (res.ok) {
+        setLeadSuccess(true);
+      }
+    } catch (error) {
+      console.error("Error submitting lead", error);
+    } finally {
+      setIsSubmittingLead(false);
+    }
+  };
 
   if (!mounted) return null;
 
@@ -121,6 +196,27 @@ export default function AuditResultsPage() {
             </p>
           )}
         </header>
+
+        {/* AI Summary Section */}
+        <section className="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-4">
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center">
+              <span className="text-purple-400">✨</span>
+            </div>
+            <h2 className="text-xl font-bold">Your Audit Summary</h2>
+          </div>
+          {isGeneratingSummary || !summary ? (
+            <div className="space-y-3 animate-pulse">
+              <div className="h-4 bg-slate-800 rounded w-full"></div>
+              <div className="h-4 bg-slate-800 rounded w-5/6"></div>
+              <div className="h-4 bg-slate-800 rounded w-4/6"></div>
+            </div>
+          ) : (
+            <p className="text-lg text-slate-300 leading-relaxed">
+              {summary}
+            </p>
+          )}
+        </section>
 
         {/* Per-tool breakdown */}
         <section className="space-y-6">
@@ -202,17 +298,29 @@ export default function AuditResultsPage() {
                 {result.totalMonthlySavings.toLocaleString()}/mo in potential
                 savings — we can help you realize them.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 pt-4">
-                <Button className="bg-purple-600 hover:bg-purple-700 px-8 py-3 text-lg">
-                  Talk to Credex
-                </Button>
-                <Button
-                  variant="outline"
-                  className="border-purple-500/30 hover:bg-purple-500/10 px-8 py-3 text-lg"
-                >
-                  Learn More
-                </Button>
-              </div>
+              {leadSuccess ? (
+                <div className="pt-4 text-emerald-400 font-medium">
+                  Thanks! We've sent you an email. Our team will be in touch shortly.
+                </div>
+              ) : (
+                <form onSubmit={handleLeadCapture} className="flex flex-col sm:flex-row gap-4 pt-4">
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    placeholder="Enter your work email"
+                    className="flex-1 max-w-sm h-12 rounded-md border border-input bg-background px-4 text-sm"
+                  />
+                  <Button 
+                    type="submit" 
+                    disabled={isSubmittingLead}
+                    className="bg-purple-600 hover:bg-purple-700 h-12 px-8 text-lg"
+                  >
+                    {isSubmittingLead ? "Sending..." : "Talk to Credex"}
+                  </Button>
+                </form>
+              )}
             </div>
           </section>
         )}
@@ -227,21 +335,43 @@ export default function AuditResultsPage() {
               Want to be notified when prices change or new savings
               opportunities arise?
             </p>
-            <div className="flex justify-center gap-2 max-w-sm mx-auto">
-              <input
-                type="email"
-                placeholder="your@email.com"
-                className="flex-1 h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
-              />
-              <Button className="bg-emerald-600 hover:bg-emerald-700">
-                Notify Me
-              </Button>
-            </div>
+            {leadSuccess ? (
+              <p className="text-emerald-400 font-medium pt-2">
+                You're on the list! We'll keep you updated.
+              </p>
+            ) : (
+              <form onSubmit={handleLeadCapture} className="flex justify-center gap-2 max-w-sm mx-auto">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  placeholder="your@email.com"
+                  className="flex-1 h-10 rounded-md border border-input bg-background px-3 py-2 text-sm"
+                />
+                <Button type="submit" disabled={isSubmittingLead} className="bg-emerald-600 hover:bg-emerald-700">
+                  {isSubmittingLead ? "..." : "Notify Me"}
+                </Button>
+              </form>
+            )}
           </section>
         )}
 
-        {/* Back link */}
-        <div className="text-center pb-12">
+        {/* Footer actions */}
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pb-12">
+          {auditId && (
+            <Button 
+              variant="outline" 
+              className="border-slate-700 hover:bg-slate-800"
+              onClick={() => {
+                const url = `${window.location.origin}/audit/results?id=${auditId}`;
+                navigator.clipboard.writeText(url);
+                alert("Share link copied to clipboard!");
+              }}
+            >
+              Copy Share Link
+            </Button>
+          )}
           <Link
             href="/audit"
             className="text-sm text-muted-foreground hover:text-white transition-colors"
