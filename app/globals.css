@@ -1,42 +1,206 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* ─── Design Tokens ────────────────────────────────────────────────────────── */
+
 :root {
-  --background: 240 10% 3.9%;
-  --foreground: 0 0% 98%;
-  --card: 240 10% 3.9%;
-  --card-foreground: 0 0% 98%;
-  --popover: 240 10% 3.9%;
-  --popover-foreground: 0 0% 98%;
-  --primary: 0 0% 98%;
-  --primary-foreground: 240 5.9% 10%;
-  --secondary: 240 3.7% 15.9%;
-  --secondary-foreground: 0 0% 98%;
-  --muted: 240 3.7% 15.9%;
-  --muted-foreground: 240 5% 64.9%;
-  --accent: 240 3.7% 15.9%;
-  --accent-foreground: 0 0% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 0 0% 98%;
-  --border: 240 3.7% 15.9%;
-  --input: 240 3.7% 15.9%;
-  --ring: 240 4.9% 83.9%;
-  --radius: 0.75rem;
+  /* Backgrounds — layered depth */
+  --bg-base:        #0A0B0D;
+  --bg-surface:     #111318;
+  --bg-elevated:    #1A1D24;
+  --bg-overlay:     #21252E;
+
+  /* Borders */
+  --border-subtle:  #1E2229;
+  --border-default: #2A2F3A;
+  --border-strong:  #3D4455;
+
+  /* Text */
+  --text-primary:   #F0F2F5;
+  --text-secondary: #8B92A5;
+  --text-muted:     #4E5568;
+  --text-inverse:   #0A0B0D;
+
+  /* Accent — Credex Green */
+  --accent:         #00C896;
+  --accent-dim:     rgba(0, 200, 150, 0.094);
+  --accent-hover:   #00E5AD;
+
+  /* Semantic */
+  --positive:       #00C896;
+  --positive-bg:    rgba(0, 200, 150, 0.063);
+  --warning:        #F5A623;
+  --warning-bg:     rgba(245, 166, 35, 0.063);
+  --negative:       #FF5C5C;
+  --negative-bg:    rgba(255, 92, 92, 0.063);
+  --neutral:        #8B92A5;
+
+  /* Special — Credex CTA */
+  --credex-cta-bg:     #0D1F18;
+  --credex-cta-border: rgba(0, 200, 150, 0.25);
+
+  /* ── shadcn/ui compatibility layer ── */
+  --background:             10 12% 4%;
+  --foreground:             220 14% 96%;
+  --card:                   220 12% 8%;
+  --card-foreground:        220 14% 96%;
+  --popover:                220 14% 10%;
+  --popover-foreground:     220 14% 96%;
+  --primary:                163 100% 39%;
+  --primary-foreground:     220 12% 4%;
+  --secondary:              220 12% 12%;
+  --secondary-foreground:   220 14% 96%;
+  --muted:                  222 12% 12%;
+  --muted-foreground:       222 14% 59%;
+  --accent-shadcn:          163 100% 39%;
+  --accent-foreground:      220 12% 4%;
+  --destructive:            0 72% 51%;
+  --destructive-foreground: 220 14% 96%;
+  --border:                 222 14% 18%;
+  --input:                  222 14% 18%;
+  --ring:                   163 100% 39%;
+  --radius:                 0.5rem;
+}
+
+/* ─── Reset & Base ─────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  background-color: var(--bg-base);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
-  background-color: hsl(var(--background));
-  color: hsl(var(--foreground));
-  font-family: 'Inter', sans-serif;
+  background-color: var(--bg-base);
+  color: var(--text-primary);
+  font-family: 'Geist', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
 }
 
-@layer utilities {
-  .glass {
-    @apply bg-white/5 backdrop-blur-lg border border-white/10;
+/* ─── Typography defaults ──────────────────────────────────────────────────── */
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  font-family: 'Geist', system-ui, sans-serif;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+p {
+  color: var(--text-secondary);
+}
+
+/* Mono labels — data, tags, plan names */
+code, kbd, samp, .font-mono {
+  font-family: 'IBM Plex Mono', 'Menlo', monospace;
+}
+
+/* Hero number treatment */
+.font-serif {
+  font-family: 'DM Serif Display', 'Georgia', serif;
+}
+
+/* ─── Focus styles — accessible, brand-matched ─────────────────────────────── */
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ─── Selection ────────────────────────────────────────────────────────────── */
+
+::selection {
+  background-color: var(--accent);
+  color: var(--text-inverse);
+}
+
+/* ─── Scrollbar (Webkit) ───────────────────────────────────────────────────── */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-base);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
+}
+
+/* ─── Number input: hide spinners ──────────────────────────────────────────── */
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+/* ─── Animations ───────────────────────────────────────────────────────────── */
+
+.step-enter {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: stepIn 0.25s ease forwards;
+}
+
+@keyframes stepIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .gradient-text {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500;
+}
+
+/* Stagger children for results page */
+.stagger-children > * {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: stepIn 0.3s ease forwards;
+}
+
+.stagger-children > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-children > *:nth-child(2) { animation-delay: 60ms; }
+.stagger-children > *:nth-child(3) { animation-delay: 120ms; }
+.stagger-children > *:nth-child(4) { animation-delay: 180ms; }
+.stagger-children > *:nth-child(5) { animation-delay: 240ms; }
+.stagger-children > *:nth-child(6) { animation-delay: 300ms; }
+.stagger-children > *:nth-child(7) { animation-delay: 360ms; }
+.stagger-children > *:nth-child(8) { animation-delay: 420ms; }
+
+/* ─── Utility classes ──────────────────────────────────────────────────────── */
+
+@layer utilities {
+  .savings-gradient {
+    background: linear-gradient(135deg, #00C896, #00E5AD);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-glow {
+    background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(13, 31, 24, 0.6) 0%, transparent 70%);
   }
 }
