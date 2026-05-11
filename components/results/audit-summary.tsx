@@ -43,35 +43,31 @@ export default function AuditSummary({ auditResult }: AuditSummaryProps) {
   }, [auditResult]);
 
   return (
-    <div className="rounded-xl border border-dashed border-border-strong bg-bg-elevated p-6 md:p-8">
-      <div className="flex items-center space-x-2">
-        <Sparkles className="h-4 w-4 text-accent" />
-        <span className="font-mono text-[11px] font-bold uppercase tracking-[0.2em] text-accent">
-          Financial Intelligence Summary
+    <div className="rounded-xl border border-dashed border-accent/20 bg-gradient-to-br from-bg-surface to-bg-elevated/80 p-5 md:p-6">
+      <div className="flex items-center gap-2">
+        <Sparkles className="h-3.5 w-3.5 text-accent" />
+        <span className="font-mono text-[10px] font-bold uppercase tracking-[0.2em] text-accent">
+          AI Analysis
         </span>
       </div>
 
-      <div className="mt-6">
+      <div className="mt-4">
         {isLoading ? (
-          <div className="space-y-4 py-2">
-            <div className="flex items-center space-x-2 text-text-muted">
-              <Loader2 className="h-4 w-4 animate-spin" />
-              <span className="font-sans text-[14px]">Analyzing tool stack redundancy...</span>
+          <div className="space-y-3">
+            <div className="flex items-center gap-2 text-text-muted">
+              <Loader2 className="h-3.5 w-3.5 animate-spin" />
+              <span className="font-sans text-[13px]">Generating insights...</span>
             </div>
-            <div className="space-y-3">
-              <div className="h-4 w-full animate-pulse rounded bg-bg-overlay" />
-              <div className="h-4 w-5/6 animate-pulse rounded bg-bg-overlay" />
-              <div className="h-4 w-4/6 animate-pulse rounded bg-bg-overlay" />
+            <div className="space-y-2">
+              <div className="h-3.5 w-full animate-pulse rounded bg-bg-overlay" />
+              <div className="h-3.5 w-5/6 animate-pulse rounded bg-bg-overlay" />
+              <div className="h-3.5 w-4/6 animate-pulse rounded bg-bg-overlay" />
             </div>
           </div>
         ) : (
-          <div className="font-sans text-[16px] leading-relaxed text-text-primary">
-            {summary ? (
-              <p className="whitespace-pre-line">{summary}</p>
-            ) : (
-              <p className="text-text-muted italic">No summary available.</p>
-            )}
-          </div>
+          <p className="font-sans text-[14px] leading-relaxed text-text-secondary">
+            {summary || <span className="italic text-text-muted">No summary available.</span>}
+          </p>
         )}
       </div>
     </div>

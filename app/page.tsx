@@ -1,97 +1,242 @@
+"use client";
+
 import Link from "next/link";
-import { ArrowRight, ShieldCheck, Zap, BarChart3 } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight, TrendingDown, Clock, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { InfiniteSlider } from "@/components/ui/infinite-slider";
+import { ProgressiveBlur } from "@/components/ui/progressive-blur";
+
+const TOOL_LOGOS = [
+  { id: "cursor",         name: "Cursor",         src: "/logos/cursor.svg"   },
+  { id: "claude",         name: "Claude",         src: "/logos/claude.svg"   },
+  { id: "github-copilot", name: "GitHub Copilot", src: "/logos/github.svg"   },
+  { id: "openai",         name: "ChatGPT",        src: "/logos/openai.svg"   },
+  { id: "gemini",         name: "Gemini",         src: "/logos/google.svg"   },
+  { id: "windsurf",       name: "Windsurf",       src: "/logos/windsurf.svg" },
+  { id: "anthropic",      name: "Anthropic API",  src: "/logos/anthropic.svg"},
+];
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-bg-base text-text-primary overflow-hidden">
-      {/* Background decoration */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1440px] h-[600px] pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[80%] bg-accent/5 blur-[120px] rounded-full" />
-        <div className="absolute top-[20%] right-[-5%] w-[30%] h-[60%] bg-accent/5 blur-[100px] rounded-full" />
+    <main className="relative min-h-screen bg-bg-base text-text-primary overflow-hidden">
+
+      {/* ── Full-page background ───────────────────────────────────────────── */}
+      <div className="pointer-events-none absolute inset-0">
+        {/* Grid pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.03]"
+          style={{
+            backgroundImage: `linear-gradient(var(--accent) 1px, transparent 1px), linear-gradient(90deg, var(--accent) 1px, transparent 1px)`,
+            backgroundSize: "60px 60px",
+          }}
+        />
+        {/* Radial glow top-right */}
+        <div className="absolute -top-[20%] -right-[10%] h-[800px] w-[800px] rounded-full bg-accent/[0.06] blur-[150px]" />
+        {/* Radial glow bottom-left */}
+        <div className="absolute -bottom-[30%] -left-[15%] h-[600px] w-[600px] rounded-full bg-accent/[0.04] blur-[130px]" />
+        {/* Diagonal accent line */}
+        <div
+          className="absolute top-0 right-0 h-full w-full opacity-[0.02]"
+          style={{
+            backgroundImage: `repeating-linear-gradient(
+              -45deg,
+              transparent,
+              transparent 80px,
+              var(--accent) 80px,
+              var(--accent) 81px
+            )`,
+          }}
+        />
       </div>
 
-      <div className="relative mx-auto max-w-results px-6 pt-24 pb-32">
-        {/* Hero */}
-        <div className="max-w-3xl space-y-8 animate-step-in">
-          <div className="inline-flex items-center space-x-2 rounded-full border border-border-strong bg-bg-surface px-3 py-1">
-            <div className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
-            <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-text-secondary">
-              Financial Intelligence for AI Stacks
-            </span>
+      {/* ── Hero Section ───────────────────────────────────────────────────── */}
+      <div className="relative">
+        <div className="mx-auto flex min-h-[calc(100vh-64px)] max-w-[1200px] flex-col justify-center px-6 py-20 md:py-24">
+
+          <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+
+            {/* Left column — Copy */}
+            <div className="space-y-8 animate-step-in">
+              <div className="inline-flex items-center space-x-2 rounded-full border border-border-strong bg-bg-surface/80 backdrop-blur-sm px-3 py-1">
+                <div className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" />
+                <span className="font-mono text-[11px] font-bold uppercase tracking-wider text-text-secondary">
+                  Financial Intelligence for AI Stacks
+                </span>
+              </div>
+
+              <h1 className="font-serif text-[44px] md:text-[64px] lg:text-[72px] leading-[1.05] tracking-tight">
+                Stop overpaying for{" "}
+                <span className="savings-gradient">AI Tooling.</span>
+              </h1>
+
+              <p className="max-w-lg font-sans text-[17px] md:text-[19px] text-text-secondary leading-relaxed">
+                Get a precise, data-backed audit of your AI tool spend in under 2 minutes. We find plan mismatches and redundancies you didn&apos;t know existed.
+              </p>
+
+              <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5 pt-2">
+                <Link href="/audit">
+                  <Button className="h-14 rounded-lg bg-accent px-8 font-sans text-[16px] font-bold text-text-inverse hover:bg-accent-hover shadow-[0_0_30px_rgba(0,200,150,0.25)] transition-shadow hover:shadow-[0_0_40px_rgba(0,200,150,0.35)]">
+                    Run my free audit
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </Button>
+                </Link>
+                <div className="flex flex-col">
+                  <span className="font-mono text-[11px] text-text-muted uppercase tracking-wider">
+                    Audited to date
+                  </span>
+                  <span className="font-sans text-[16px] font-semibold text-text-primary">
+                    $4.2M+ in AI Spend
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right column — Visual dashboard mockup */}
+            <div className="relative hidden lg:block animate-step-in" style={{ animationDelay: "150ms" }}>
+              <div className="relative mx-auto w-full max-w-[480px]">
+                {/* Glow behind the cards */}
+                <div className="absolute inset-0 rounded-3xl bg-accent/[0.06] blur-[60px]" />
+
+                {/* Floating audit result cards */}
+                <div className="relative space-y-4">
+                  {/* Card 1 — Savings found */}
+                  <div className="rounded-xl border border-border-strong bg-bg-surface/80 backdrop-blur-md p-5 shadow-2xl shadow-black/20">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-warning/10 border border-warning/20">
+                          <TrendingDown className="h-5 w-5 text-warning" />
+                        </div>
+                        <div>
+                          <p className="font-sans text-[14px] font-semibold text-text-primary">GitHub Copilot</p>
+                          <p className="font-mono text-[11px] text-text-muted">Business → Individual</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-serif text-[24px] text-positive">$27</p>
+                        <p className="font-mono text-[10px] text-text-muted uppercase">saved/mo</p>
+                      </div>
+                    </div>
+                    <div className="mt-3 flex items-center gap-2 rounded-lg bg-bg-elevated/60 px-3 py-2 border border-border-subtle">
+                      <div className="h-1.5 w-1.5 rounded-full bg-accent" />
+                      <span className="font-sans text-[12px] text-text-secondary">Downgrade to Individual — identical AI features</span>
+                    </div>
+                  </div>
+
+                  {/* Card 2 — Redundancy */}
+                  <div className="ml-6 rounded-xl border border-border-strong bg-bg-surface/80 backdrop-blur-md p-5 shadow-2xl shadow-black/20">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-negative/10 border border-negative/20">
+                          <TrendingDown className="h-5 w-5 text-negative" />
+                        </div>
+                        <div>
+                          <p className="font-sans text-[14px] font-semibold text-text-primary">Windsurf</p>
+                          <p className="font-mono text-[11px] text-text-muted">Redundant with Cursor</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-serif text-[24px] text-positive">$75</p>
+                        <p className="font-mono text-[10px] text-text-muted uppercase">saved/mo</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Card 3 — Optimal */}
+                  <div className="ml-2 rounded-xl border border-border-subtle bg-bg-surface/60 backdrop-blur-md p-4 shadow-2xl shadow-black/20">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-positive/10 border border-positive/20">
+                          <Shield className="h-4 w-4 text-positive" />
+                        </div>
+                        <div>
+                          <p className="font-sans text-[13px] font-medium text-text-primary">Claude Pro</p>
+                          <div className="flex items-center gap-1.5">
+                            <div className="h-1.5 w-1.5 rounded-full bg-positive" />
+                            <span className="font-mono text-[10px] text-positive">Optimized</span>
+                          </div>
+                        </div>
+                      </div>
+                      <p className="font-serif text-[18px] text-text-secondary">$20<span className="text-[11px] font-sans text-text-muted">/mo</span></p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Floating total savings badge */}
+                <div className="absolute -top-12 right-6 z-10 rounded-xl border border-accent/30 bg-credex-cta-bg backdrop-blur-md px-5 py-3 shadow-lg shadow-accent/10">
+                  <p className="font-mono text-[9px] uppercase tracking-wider text-accent">Total Savings</p>
+                  <p className="font-serif text-[22px] savings-gradient leading-tight">$102/mo</p>
+                </div>
+              </div>
+            </div>
           </div>
 
-          <h1 className="font-serif text-[48px] md:text-[80px] leading-[1.1] tracking-tight">
-            Stop overpaying for <br />
-            <span className="savings-gradient">AI Tooling.</span>
-          </h1>
-
-          <p className="max-w-xl font-sans text-[18px] md:text-[20px] text-text-secondary leading-relaxed">
-            Get a precise, data-backed audit of your AI tool spend in under 2 minutes. We find plan mismatches and redundancies you didn&apos;t know existed.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 pt-4">
-            <Link href="/audit">
-              <Button className="h-14 rounded-md bg-accent px-8 font-sans text-[16px] font-bold text-text-inverse hover:bg-accent-hover shadow-[0_0_20px_rgba(0,200,150,0.2)]">
-                Run my free audit
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-            <div className="flex flex-col">
-              <span className="font-mono text-[12px] text-text-muted uppercase tracking-wider">
-                Audited to date
-              </span>
-              <span className="font-sans text-[16px] font-semibold text-text-primary">
-                $4.2M+ in AI Spend
-              </span>
+          {/* ── Key stats bar ──────────────────────────────────────────────── */}
+          <div className="mt-16 grid grid-cols-3 gap-4 rounded-xl border border-border-subtle bg-bg-surface/30 backdrop-blur-sm p-4 md:p-6 lg:mt-20">
+            <div className="flex items-center gap-3 md:justify-center">
+              <Clock className="h-4 w-4 text-accent shrink-0" />
+              <div>
+                <p className="font-sans text-[14px] md:text-[15px] font-semibold text-text-primary">Under 2 min</p>
+                <p className="font-mono text-[10px] text-text-muted uppercase tracking-wider">Audit time</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 md:justify-center">
+              <Shield className="h-4 w-4 text-accent shrink-0" />
+              <div>
+                <p className="font-sans text-[14px] md:text-[15px] font-semibold text-text-primary">100% Private</p>
+                <p className="font-mono text-[10px] text-text-muted uppercase tracking-wider">No API keys</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 md:justify-center">
+              <TrendingDown className="h-4 w-4 text-accent shrink-0" />
+              <div>
+                <p className="font-sans text-[14px] md:text-[15px] font-semibold text-text-primary">Real pricing</p>
+                <p className="font-mono text-[10px] text-text-muted uppercase tracking-wider">No estimates</p>
+              </div>
             </div>
           </div>
         </div>
+      </div>
 
-        {/* Features / Social Proof */}
-        <div className="mt-32 grid grid-cols-1 md:grid-cols-3 gap-12 border-t border-border-subtle pt-16">
-          <div className="space-y-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-border-subtle bg-bg-surface">
-              <BarChart3 className="h-5 w-5 text-accent" />
-            </div>
-            <h3 className="font-sans text-[16px] font-semibold">Deterministic Logic</h3>
-            <p className="font-sans text-[14px] text-text-secondary leading-relaxed">
-              No estimates. Our engine uses real-time pricing data and team-size constraints to find exact savings.
-            </p>
-          </div>
-          
-          <div className="space-y-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-border-subtle bg-bg-surface">
-              <ShieldCheck className="h-5 w-5 text-accent" />
-            </div>
-            <h3 className="font-sans text-[16px] font-semibold">Privacy First</h3>
-            <p className="font-sans text-[14px] text-text-secondary leading-relaxed">
-              We don&apos;t need your credit card or API keys. Your data stays local until you decide to share it.
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg border border-border-subtle bg-bg-surface">
-              <Zap className="h-5 w-5 text-accent" />
-            </div>
-            <h3 className="font-sans text-[16px] font-semibold">Instant Execution</h3>
-            <p className="font-sans text-[14px] text-text-secondary leading-relaxed">
-              Transition plans delivered immediately. Swap to optimized tiers and consolidate tools with one click.
-            </p>
-          </div>
-        </div>
-
-        {/* Tool logos */}
-        <div className="mt-24 py-8 border-y border-border-subtle/50 overflow-hidden grayscale opacity-40">
-          <div className="flex items-center justify-between gap-12 animate-marquee whitespace-nowrap">
-            <span className="font-mono text-[14px] font-bold">CURSOR</span>
-            <span className="font-mono text-[14px] font-bold">CLAUDE</span>
-            <span className="font-mono text-[14px] font-bold">CHATGPT</span>
-            <span className="font-mono text-[14px] font-bold">GITHUB COPILOT</span>
-            <span className="font-mono text-[14px] font-bold">GEMINI</span>
-            <span className="font-mono text-[14px] font-bold">WINDSURF</span>
-            <span className="font-mono text-[14px] font-bold">OPENAI API</span>
-          </div>
+      {/* ── Tools Slider ───────────────────────────────────────────────────── */}
+      <div className="relative border-t border-border-subtle/50 py-8 md:py-10">
+        <p className="mb-5 text-center font-mono text-[10px] uppercase tracking-[0.25em] text-text-muted">
+          Supported Tools
+        </p>
+        <div className="relative mx-auto max-w-[1000px]">
+          <InfiniteSlider
+            className="flex h-[60px] w-full items-center"
+            duration={30}
+            gap={56}
+          >
+            {TOOL_LOGOS.map((tool) => (
+              <div
+                key={tool.id}
+                className="flex w-36 items-center justify-center gap-2.5 opacity-50 transition-opacity hover:opacity-80"
+              >
+                <Image
+                  src={tool.src}
+                  alt={tool.name}
+                  width={20}
+                  height={20}
+                  className="object-contain brightness-0 invert opacity-60"
+                />
+                <span className="font-mono text-[12px] font-medium text-text-muted whitespace-nowrap">
+                  {tool.name}
+                </span>
+              </div>
+            ))}
+          </InfiniteSlider>
+          <ProgressiveBlur
+            className="pointer-events-none absolute top-0 left-0 h-full w-[200px]"
+            direction="left"
+            blurIntensity={1}
+          />
+          <ProgressiveBlur
+            className="pointer-events-none absolute top-0 right-0 h-full w-[200px]"
+            direction="right"
+            blurIntensity={1}
+          />
         </div>
       </div>
     </main>

@@ -2,20 +2,19 @@
 
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Loader2, ArrowRight, CheckCircle2 } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { Loader2, ArrowRight, CheckCircle2, Shield } from "lucide-react";
 
-interface ResultsSidebarProps {
+interface LeadCaptureBannerProps {
   totalMonthlySavings: number;
   totalAnnualSavings: number;
   auditId: string;
 }
 
-export default function ResultsSidebar({
+export default function LeadCaptureBanner({
   totalMonthlySavings,
   totalAnnualSavings,
   auditId,
-}: ResultsSidebarProps) {
+}: LeadCaptureBannerProps) {
   const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -42,96 +41,70 @@ export default function ResultsSidebar({
     }
   };
 
-  const formatCurrency = (val: number) => {
-    return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 0,
-    }).format(val);
-  };
+  const formatCurrency = (val: number) =>
+    new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", maximumFractionDigits: 0 }).format(val);
 
-  return (
-    <div className="sticky top-24 w-full md:w-sidebar space-y-6">
-      {/* Summary Card */}
-      <div className="rounded-xl border border-border-strong bg-bg-surface p-6 space-y-6">
-        <div className="space-y-4">
-          <div className="space-y-1">
-            <span className="font-mono text-[11px] uppercase tracking-wider text-text-muted">
-              Total Monthly Savings
-            </span>
-            <div className="font-serif text-[32px] text-positive">
-              {formatCurrency(totalMonthlySavings)}
-            </div>
-          </div>
-          
-          <div className="space-y-1">
-            <span className="font-mono text-[11px] uppercase tracking-wider text-text-muted">
-              Projected Annual Savings
-            </span>
-            <div className="font-serif text-[24px] text-text-primary">
-              {formatCurrency(totalAnnualSavings)}
-            </div>
-          </div>
-        </div>
-
-        <div className="h-[1px] w-full bg-border-subtle" />
-
-        <div className="space-y-4">
-          <div className="space-y-1">
-            <h4 className="font-sans text-[15px] font-semibold text-text-primary">
-              Capture these savings
-            </h4>
-            <p className="font-sans text-[13px] leading-relaxed text-text-secondary">
-              Credex helps teams buy AI credits at up to 40% off. Get a custom transition plan to realize these savings.
+  if (isSuccess) {
+    return (
+      <div className="rounded-xl border border-positive/20 bg-positive/5 p-6 md:p-8 animate-step-in">
+        <div className="flex flex-col items-center justify-center gap-3 text-center">
+          <CheckCircle2 className="h-8 w-8 text-positive" />
+          <div>
+            <p className="font-sans text-[16px] font-semibold text-text-primary">Request Received</p>
+            <p className="mt-1 font-sans text-[13px] text-text-secondary">
+              We&apos;ll be in touch shortly with your personalized savings plan.
             </p>
           </div>
-
-          {isSuccess ? (
-            <div className="flex flex-col items-center justify-center space-y-3 rounded-lg bg-positive/10 p-6 text-center animate-step-in">
-              <CheckCircle2 className="h-8 w-8 text-positive" />
-              <div>
-                <p className="font-sans text-[14px] font-semibold text-text-primary">
-                  Request Received
-                </p>
-                <p className="font-sans text-[12px] text-text-secondary">
-                  We&apos;ll be in touch shortly.
-                </p>
-              </div>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} className="space-y-3">
-              <input
-                type="email"
-                required
-                placeholder="Work email address"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full rounded-md border border-border-default bg-bg-elevated px-3 py-2.5 font-sans text-[14px] text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none"
-              />
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-full h-11 bg-accent font-sans text-[14px] font-semibold text-text-inverse hover:bg-accent-hover"
-              >
-                {isSubmitting ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <>
-                    Talk to Credex
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </>
-                )}
-              </Button>
-            </form>
-          )}
         </div>
       </div>
+    );
+  }
 
-      {/* Trust Badge */}
-      <div className="rounded-xl border border-border-subtle bg-bg-base/50 p-4 text-center">
-        <p className="font-mono text-[10px] uppercase tracking-[0.1em] text-text-muted">
-          Secured by Credex Protocol
-        </p>
+  return (
+    <div className="rounded-xl border border-credex-cta-border bg-credex-cta-bg p-6 md:p-8">
+      <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+        {/* Left — Value prop */}
+        <div className="flex-1 space-y-2">
+          <h3 className="font-sans text-[18px] font-semibold text-text-primary">
+            Ready to capture {totalMonthlySavings > 0 ? formatCurrency(totalAnnualSavings) : "these"} in annual savings?
+          </h3>
+          <p className="font-sans text-[14px] text-text-secondary leading-relaxed">
+            Credex helps teams buy AI credits at up to 40% off. Get a custom transition plan to realize these savings.
+          </p>
+        </div>
+
+        {/* Right — Form */}
+        <form onSubmit={handleSubmit} className="flex w-full gap-2 md:w-auto md:min-w-[340px]">
+          <input
+            type="email"
+            required
+            placeholder="Work email address"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="min-w-0 flex-1 rounded-lg border border-border-default bg-bg-elevated px-3 py-2.5 font-sans text-[14px] text-text-primary placeholder:text-text-muted focus:border-accent focus:outline-none"
+          />
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="h-[42px] shrink-0 bg-accent px-5 font-sans text-[14px] font-semibold text-text-inverse hover:bg-accent-hover"
+          >
+            {isSubmitting ? (
+              <Loader2 className="h-4 w-4 animate-spin" />
+            ) : (
+              <>
+                Get Plan
+                <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+              </>
+            )}
+          </Button>
+        </form>
+      </div>
+
+      <div className="mt-4 flex items-center gap-1.5 text-text-muted">
+        <Shield className="h-3 w-3" />
+        <span className="font-mono text-[10px] uppercase tracking-wider">
+          No spam · One-time email · Secured by Credex Protocol
+        </span>
       </div>
     </div>
   );
