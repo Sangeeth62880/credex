@@ -6,8 +6,10 @@ import ResultsHero from "@/components/results/results-hero";
 import AuditCard from "@/components/results/audit-card";
 import LeadCaptureBanner from "@/components/results/results-sidebar";
 import AuditSummary from "@/components/results/audit-summary";
+import BenchmarkSection from "@/components/results/benchmark-section";
+import ReferralSection from "@/components/results/referral-section";
 import { AuditResult } from "@/lib/audit-engine";
-import { Loader2, AlertCircle } from "lucide-react";
+import { Loader2, AlertCircle, FileDown, Share2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 function ResultsContent() {
@@ -17,6 +19,10 @@ function ResultsContent() {
   const [data, setData] = useState<{ result: AuditResult } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+
+  const handlePrint = () => {
+    window.print();
+  };
 
   useEffect(() => {
     if (!id) {
@@ -95,6 +101,46 @@ function ResultsContent() {
 
       {/* Main Content — full width, no sidebar */}
       <div className="mx-auto max-w-[1080px] px-6">
+        
+        {/* Actions Bar */}
+        <div className="no-print mt-6 flex flex-wrap items-center justify-between gap-4 border-b border-border-subtle pb-6">
+          <div className="flex items-center gap-3">
+            <h3 className="font-mono text-[11px] uppercase tracking-[0.2em] text-text-muted">Report Actions</h3>
+            <div className="h-4 w-px bg-border-subtle" />
+            <p className="font-sans text-[13px] text-text-secondary">Audit ID: <span className="font-mono text-text-primary">{id?.slice(0, 8)}</span></p>
+          </div>
+          
+          <div className="flex items-center gap-2">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="h-9 border-border-strong bg-bg-surface text-[12px] text-text-primary hover:bg-bg-elevated"
+              onClick={handlePrint}
+            >
+              <FileDown className="mr-2 h-3.5 w-3.5" />
+              Export PDF
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="h-9 border-border-strong bg-bg-surface text-[12px] text-text-primary hover:bg-bg-elevated"
+              onClick={() => {
+                navigator.share?.({
+                  title: 'Credex AI Audit Report',
+                  url: window.location.href
+                });
+              }}
+            >
+              <Share2 className="mr-2 h-3.5 w-3.5" />
+              Share Report
+            </Button>
+          </div>
+        </div>
+
+        {/* Benchmark Section */}
+        <div className="mt-8 animate-step-in">
+          <BenchmarkSection benchmarks={result.benchmarks} />
+        </div>
 
         {/* AI Summary */}
         <div className="mt-8 animate-step-in">
@@ -137,8 +183,13 @@ function ResultsContent() {
           </div>
         )}
 
+        {/* Referral Section */}
+        <div className="mt-12 no-print animate-step-in" style={{ animationDelay: '300ms' }}>
+          <ReferralSection referralCode={result.referralCode} />
+        </div>
+
         {/* CTA Banner */}
-        <div className="mt-12 animate-step-in" style={{ animationDelay: '400ms' }}>
+        <div className="mt-12 no-print animate-step-in" style={{ animationDelay: '400ms' }}>
           <LeadCaptureBanner
             totalMonthlySavings={result.totalMonthlySavings}
             totalAnnualSavings={result.totalAnnualSavings}

@@ -4,8 +4,12 @@ import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight, TrendingDown, Clock, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { InfiniteSlider } from "@/components/ui/infinite-slider";
+import dynamic from "next/dynamic";
 import { ProgressiveBlur } from "@/components/ui/progressive-blur";
+
+const InfiniteSlider = dynamic(() => import("@/components/ui/infinite-slider").then(mod => mod.InfiniteSlider), {
+  ssr: false,
+});
 
 const TOOL_LOGOS = [
   { id: "cursor",         name: "Cursor",         src: "/logos/cursor.svg"   },
@@ -199,7 +203,7 @@ export default function Home() {
       </div>
 
       {/* ── Tools Slider ───────────────────────────────────────────────────── */}
-      <div className="relative border-t border-border-subtle/50 py-8 md:py-10">
+      <div className="relative py-8 md:py-10">
         <p className="mb-5 text-center font-mono text-[10px] uppercase tracking-[0.25em] text-text-muted">
           Supported Tools
         </p>

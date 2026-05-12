@@ -1,8 +1,9 @@
 /**
  * Audit Engine — Core Logic
  * 
- * Pure deterministic logic for identifying overspend in AI tool stacks.
+ * Pure deterministic logic for identifying overspend in AI tool stack.
  */
+// Benchmark and Referral logic below
 
 export interface ToolInput {
   id: string;
@@ -32,13 +33,23 @@ export interface ToolAudit {
   badge: 'OVERSPENDING' | 'DOWNGRADE PLAN' | 'SWITCH TOOL' | 'CONSIDER CREDITS' | 'OPTIMAL';
 }
 
+export interface BenchmarkData {
+  spendPerDeveloper: number;
+  averageSpendPerDeveloper: number;
+  percentDiff: number;
+  status: 'below_average' | 'average' | 'above_average';
+}
+
 export interface AuditResult {
   toolAudits: ToolAudit[];
   totalMonthlySavings: number;
   totalAnnualSavings: number;
+  totalMonthlySpend: number;
   toolCount: number;
   highSavingsThreshold: boolean;
   formInput: FormInput;
+  benchmarks: BenchmarkData;
+  referralCode: string;
 }
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
@@ -251,14 +262,49 @@ export function runAudit(input: FormInput): AuditResult {
   // For now, we follow the prompt's instruction to add it as a secondary note if we had a notes field.
   // Actually, we can check high spend tools separately in the UI, or modify the reason.
 
+  const totalMonthlySpend = activeTools.reduce((sum, t) => sum + t.monthlySpend, 0);
   const totalMonthlySavings = toolAudits.reduce((sum, a) => sum + a.monthlySavings, 0);
+
+  // Benchmarking Logic
+  const teamSizeMap: Record<string, number> = {
+    "Just me (1)": 1,
+    "Small (2–5)": 3.5,
+    "Medium (6–15)": 10.5,
+    "Growing (16–50)": 33,
+    "Large (50+)": 100,
+  };
+  const benchmarkMap: Record<string, number> = {
+    "Just me (1)": 60,
+    "Small (2–5)": 50,
+    "Medium (6–15)": 45,
+    "Growing (16–50)": 40,
+    "Large (50+)": 35,
+  };
+
+  const estimatedSeats = teamSizeMap[input.teamSize] || 1;
+  const spendPerDeveloper = totalMonthlySpend / estimatedSeats;
+  const averageSpendPerDeveloper = benchmarkMap[input.teamSize] || 40;
+  const percentDiff = ((spendPerDeveloper - averageSpendPerDeveloper) / averageSpendPerDeveloper) * 100;
+
+  const benchmarks: BenchmarkData = {
+    spendPerDeveloper,
+    averageSpendPerDeveloper,
+    percentDiff,
+    status: percentDiff > 10 ? 'above_average' : percentDiff < -10 ? 'below_average' : 'average',
+  };
+
+  // Generate simple referral code (mock)
+  const referralCode = `AUDIT-${Math.random().toString(36).substring(7).toUpperCase()}`;
 
   return {
     toolAudits,
     totalMonthlySavings,
     totalAnnualSavings: totalMonthlySavings * 12,
+    totalMonthlySpend,
     toolCount: activeTools.length,
     highSavingsThreshold: totalMonthlySavings > 500,
     formInput: input,
+    benchmarks,
+    referralCode,
   };
 }

@@ -63,9 +63,9 @@ const config: Config = {
         ring:   "hsl(var(--ring))",
       },
       fontFamily: {
-        serif: ['"DM Serif Display"', "Georgia", "serif"],
-        sans:  ['"Geist"', "system-ui", "-apple-system", "sans-serif"],
-        mono:  ['"IBM Plex Mono"', '"Menlo"', "monospace"],
+        serif: ['var(--font-dm-serif)', "Georgia", "serif"],
+        sans:  ['var(--font-geist)', "system-ui", "-apple-system", "sans-serif"],
+        mono:  ['var(--font-mono)', '"Menlo"', "monospace"],
       },
       fontSize: {
         "xs":  ["11px",  { lineHeight: "16px" }],
