@@ -2,7 +2,7 @@
 
 ## 1. Rahul K — Freelance Developer / Final Year CS Student
 
-Talked over Discord for around 10 mins. Rahul does freelance MERN projects and uses ChatGPT Plus + Cursor regularly.
+Talked over Discord for around 10 mins. Rahul does freelance MERN projects and uses Claude + Copilot regularly.
 
 He said he mostly buys AI tools because “everyone on X keeps posting insane workflows.” He was using both Claude Pro and ChatGPT Plus at one point but cancelled Claude after realizing he barely opened it outside coding sessions.
 
@@ -18,31 +18,7 @@ One thing I didn’t expect was him saying he sometimes shares subscriptions wit
 
 This changed how I thought about recommendations in the audit. Initially I was only thinking about companies/startups, but after this I added logic around individual usage and smaller teams. I also made the tone less finance-heavy and more practical.
 
----
-
-## 2. Athul S — Junior Developer at Small Startup (~6 people)
-
-Got introduced through a senior from college. Quick WhatsApp call.
-
-Their startup uses GitHub Copilot Business, Claude Team, and OpenAI API credits. He mentioned nobody really tracks who requested what tool anymore.
-
-A few direct things he said:
-
-> “We definitely pay for overlapping stuff but it’s not that much so no one really cares.”
-
-> “Finance only notices AI spend after the bill suddenly spikes.”
-
-> “If your tool asks me to create an account before showing results I’m closing it.”
-
-He also mentioned something funny — some developers on the team still pay personally for ChatGPT Plus even though the company already provides Claude Team access.
-
-The surprising part was that he didn’t care about deep analytics at all. He basically said if the product takes more than a couple minutes to understand, people won’t bother.
-
-Because of this conversation I simplified the audit results page a lot. I removed some unnecessary charts and pushed the “monthly savings” number directly to the top.
-
----
-
-## 3. Neeraja T — Indie Hacker / College Senior
+## 2. Neeraja T — Indie Hacker / College Senior
 
 Met through college startup community. Mostly builds side projects and experiments with new AI coding tools constantly.
 
