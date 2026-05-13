@@ -9,15 +9,15 @@
 ### 1. Interactive Audit Flow
 Users select their current stack and configuration through a sleek, multi-step interface that validates seat counts and plan tiers in real-time.
 
-![Audit Step 1 — Tool Selection](/Users/sangeethps/.gemini/antigravity/brain/1bb47203-3390-4d2f-8941-0bb5922053d5/audit_step_1_1778603537913.png)
+![Audit Step 1 — Tool Selection](docs/assets/audit_step_1_1778603537913.png)
 
 ### 2. Strategic Financial Results
 The audit generates a comprehensive report featuring a **Global AI Benchmark**, specific **Actionable Recommendations**, and an **AI-powered Strategic Summary**.
 
-![Audit Results Overview](/Users/sangeethps/.gemini/antigravity/brain/1bb47203-3390-4d2f-8941-0bb5922053d5/audit_results_top_1778603636133.png)
+![Audit Results Overview](docs/assets/audit_results_top_1778603636133.png)
 
 ### 3. Full App Demo (30s)
-![App Walkthrough Recording](/Users/sangeethps/.gemini/antigravity/brain/1bb47203-3390-4d2f-8941-0bb5922053d5/app_walkthrough_1778603486943.webp)
+![App Walkthrough Recording](docs/assets/app_walkthrough_1778603486943.webp)
 
 ---
 

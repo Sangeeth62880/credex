@@ -28,4 +28,4 @@ This project uses **Jest** for unit and integration testing. The test suite focu
    ```
 
 ## CI Integration
-Tests are automatically executed on every push to the `main` branch via GitHub Actions. See [.github/workflows/ci.yml](file:///Users/sangeethps/Documents/credex/credex-audit/.github/workflows/ci.yml) for details.
+Tests are automatically executed on every push to the `main` branch via GitHub Actions. See [.github/workflows/ci.yml](.github/workflows/ci.yml) for details.
