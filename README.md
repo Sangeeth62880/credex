@@ -68,4 +68,4 @@ The audit generates a comprehensive report featuring a **Global AI Benchmark**, 
 
 ## 🌐 Deployment
 The app is optimized for Vercel. 
-**Deployed URL**: c
+**Deployed URL**: https://https://credex-two-beige.vercel.app/
