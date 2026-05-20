@@ -32,26 +32,32 @@ export async function getLatestPricingSnapshot(): Promise<PricingSnapshot> {
 
     if (snapshots && snapshots.length > 0) {
       const latest = snapshots[0] as PricingSnapshot;
-      cachedLatestSnapshot = latest;
-      return latest;
+      
+      // If the latest snapshot in the database matches the current code version, use it
+      if (latest.version === PRICING_VERSION) {
+        cachedLatestSnapshot = latest;
+        return latest;
+      }
+      
+      console.log(`New code pricing version detected (${PRICING_VERSION} vs DB latest ${latest.version}). Auto-seeding new snapshot...`);
     }
 
-    // If none exists, write the initial hardcoded PRICING_DATA snapshot
-    console.log("No pricing snapshots found. Inserting initial snapshot from PRICING_DATA...");
+    // If none exists or the version is bumped, write the new PRICING_DATA snapshot
+    console.log("No matching pricing snapshot found. Inserting new snapshot from PRICING_DATA...");
     const { data: newSnapshot, error: insertError } = await supabase
       .from("pricing_snapshots")
       .insert([
         {
           version: PRICING_VERSION,
           data: PRICING_DATA,
-          notes: "Initial hardcoded pricing snapshot from PRICING_DATA",
+          notes: `Auto-seeded pricing snapshot for version ${PRICING_VERSION}`,
         },
       ])
       .select()
       .single();
 
     if (insertError) {
-      console.error("Error inserting initial pricing snapshot:", insertError);
+      console.error("Error inserting pricing snapshot:", insertError);
       // Fallback: return temporary mock object so the app doesn't crash
       const mockSnapshot: PricingSnapshot = {
         id: "00000000-0000-0000-0000-000000000000",

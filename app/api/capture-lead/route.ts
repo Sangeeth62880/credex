@@ -31,15 +31,17 @@ export async function POST(request: Request) {
       console.warn("Resend not configured, skipping email send");
       isMock = true;
     } else {
+      const fromEmail = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
       const { error } = await resend.emails.send({
-        from: "Credex Audit <audit@credex.com>", // Replace with verified domain in production
+        from: `Credex Audit <${fromEmail}>`, // Fallback to onboarding@resend.dev in local development
         to: [email],
         subject: "Your AI Spend Audit Results",
         html: `
           <div>
             <h1>Your AI Spend Audit is ready!</h1>
             <p>Thank you for using the Credex AI Spend Audit tool.</p>
-            ${auditId ? `<p>You can review your results anytime at: <a href="https://credex.com/audit/results?id=${auditId}">Your Audit Link</a></p>` : ""}
+            ${auditId ? `<p>You can review your results anytime at: <a href="${appUrl}/audit/results?id=${auditId}">Your Audit Link</a></p>` : ""}
             <p>If you're ready to capture these savings, reply to this email to talk to our team.</p>
             <br />
             <p>Best,</p>

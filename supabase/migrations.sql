@@ -47,6 +47,9 @@ ALTER TABLE notification_log ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "Enable read access for all users" ON pricing_snapshots
   FOR SELECT USING (true);
 
+CREATE POLICY "Enable insert for all users" ON pricing_snapshots
+  FOR INSERT WITH CHECK (true);
+
 CREATE POLICY "Enable insert for all users" ON unsubscribes
   FOR INSERT WITH CHECK (true);
 
@@ -55,3 +58,8 @@ CREATE POLICY "Enable read access for all users" ON unsubscribes
 
 CREATE POLICY "Enable all for anonymous users" ON notification_log
   USING (true) WITH CHECK (true);
+
+-- 7. Allow anonymous users to read leads (needed for change detection user lookup)
+CREATE POLICY "Enable select for all users" ON leads
+  FOR SELECT USING (true);
+

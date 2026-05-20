@@ -1,5 +1,5 @@
 import { Resend } from "resend";
-import { supabase } from "./supabase";
+import { supabaseAdmin as supabase } from "./supabase-admin";
 import { getPricingSnapshot } from "./pricing-snapshot";
 import { runAudit } from "./audit-engine";
 
@@ -24,7 +24,7 @@ export async function sendPricingChangeNotification(
     }
 
     if (unsubscribe) {
-      console.log(`Skipping notification for ${userEmail}: User is unsubscribed.`);
+      console.log(`[notify:SKIP-1] ${userEmail} is unsubscribed.`);
       return false;
     }
 
@@ -42,14 +42,14 @@ export async function sendPricingChangeNotification(
     }
 
     if (existingLog) {
-      console.log(`Skipping notification for ${userEmail}: Already notified for snapshot ${pricingSnapshotId}.`);
+      console.log(`[notify:SKIP-2] ${userEmail} already notified for snapshot ${pricingSnapshotId}.`);
       return false;
     }
 
     // Fetch the new snapshot to re-run the audits
     const snapshot = await getPricingSnapshot(pricingSnapshotId);
     if (!snapshot) {
-      console.error(`Cannot send emails, pricing snapshot ${pricingSnapshotId} not found.`);
+      console.error(`[notify:FAIL-3] Snapshot ${pricingSnapshotId} not found.`);
       return false;
     }
 
@@ -94,8 +94,8 @@ export async function sendPricingChangeNotification(
             </tr>
           </table>
           <div style="text-align: center; margin-top: 16px;">
-            <a href="${appUrl}/audit/${audit.id}/diff" style="background-color: #6366F1; color: #FFFFFF; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: bold; display: inline-block;">
-              View Side-by-Side Diff
+            <a href="${appUrl}/audit/results?id=${audit.id}" style="background-color: #6366F1; color: #FFFFFF; text-decoration: none; padding: 8px 16px; border-radius: 6px; font-size: 14px; font-weight: bold; display: inline-block;">
+              View Recalculated Audit Results
             </a>
           </div>
         </div>
@@ -120,9 +120,10 @@ export async function sendPricingChangeNotification(
       .single();
 
     if (insertError) {
-      console.error(`Failed to create notification log for ${userEmail}:`, insertError);
+      console.error(`[notify:FAIL-4] notification_log insert failed for ${userEmail}:`, insertError);
       return false;
     }
+    console.log(`[notify:OK-4] notification_log entry created: ${logEntry?.id}`);
 
     // 4. Send Email via Resend
     if (process.env.RESEND_API_KEY) {
@@ -158,17 +159,19 @@ export async function sendPricingChangeNotification(
         </div>
       `;
 
+      const fromEmail = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
       const { error: sendError } = await resend.emails.send({
-        from: "Credex Spend Auditor <alerts@credex.com>",
+        from: `Credex Spend Auditor <${fromEmail}>`,
         to: [userEmail],
         subject: `[Re-Audit Alert] AI Pricing Shifts: Your Savings Have Changed`,
         html: emailHtml,
       });
 
       if (sendError) {
-        console.error(`Error sending Resend email to ${userEmail}:`, sendError);
+        console.error(`[notify:FAIL-5] Resend error for ${userEmail}:`, sendError);
         return false;
       }
+      console.log(`[notify:OK-5] Email sent to ${userEmail} via Resend.`);
     } else {
       console.warn(`Resend API Key is missing. Mock-sent email alert to ${userEmail}.`);
     }

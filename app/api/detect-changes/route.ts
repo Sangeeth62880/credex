@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { supabaseAdmin } from "@/lib/supabase-admin";
 import { getLatestPricingSnapshot, getPricingSnapshot } from "@/lib/pricing-snapshot";
 import { detectAffectedAudits } from "@/lib/detect-pricing-changes";
 import { sendPricingChangeNotification } from "@/lib/send-pricing-emails";
@@ -83,11 +84,16 @@ async function handleDetectChanges(request: Request) {
     }
 
     // 4. Map Affected Audits to User Emails (Leads)
+    // Must use supabaseAdmin — the leads table has RLS that blocks anon reads.
     const affectedAuditIds = affected.map((a) => a.id);
-    const { data: leads, error: leadsError } = await supabase
+    console.log("[detect-changes] Affected audit IDs:", affectedAuditIds);
+
+    const { data: leads, error: leadsError } = await supabaseAdmin
       .from("leads")
       .select("email, audit_id")
       .in("audit_id", affectedAuditIds);
+
+    console.log("[detect-changes] Leads query result:", { leads, leadsError });
 
     if (leadsError) {
       console.error("Failed to fetch leads for affected audits:", leadsError);
