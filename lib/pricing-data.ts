@@ -14,6 +14,8 @@ export type PlanTier = {
   features: string[];
 };
 
+export const PRICING_VERSION = "2026-05-20";
+
 export type ToolPricing = {
   tool: string;
   category: ("coding" | "writing" | "data" | "research" | "mixed")[];
