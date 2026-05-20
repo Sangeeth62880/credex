@@ -56,7 +56,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${geist.variable} ${dmSerif.variable} ${ibmPlexMono.variable} dark`}>
+    <html lang="en" className={`${geist.variable} ${dmSerif.variable} ${ibmPlexMono.variable}`}>
       <body className="font-sans antialiased bg-bg-base text-text-primary">
         <FormProvider>
           <LayoutWrapper>

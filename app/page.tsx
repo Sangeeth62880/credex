@@ -223,7 +223,7 @@ export default function Home() {
                   alt={tool.name}
                   width={20}
                   height={20}
-                  className="object-contain brightness-0 invert opacity-60"
+                  className="object-contain brightness-0 opacity-60"
                 />
                 <span className="font-mono text-[12px] font-medium text-text-muted whitespace-nowrap">
                   {tool.name}
