@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { supabase } from "@/lib/supabase";
+import { getLatestPricingSnapshot } from "@/lib/pricing-snapshot";
 
 export async function POST(request: Request) {
   try {
@@ -19,6 +20,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ id: "mock-id-123" });
     }
 
+    let pricingSnapshotId = null;
+    try {
+      const snapshot = await getLatestPricingSnapshot();
+      pricingSnapshotId = snapshot?.id || null;
+    } catch (e) {
+      console.warn("Failed to retrieve latest pricing snapshot during insert:", e);
+    }
+
     const { data, error } = await supabase
       .from("audits")
       .insert([
@@ -26,6 +35,7 @@ export async function POST(request: Request) {
           input_data: input,
           result_data: result,
           total_monthly_savings: result.totalMonthlySavings,
+          pricing_snapshot_id: pricingSnapshotId,
         },
       ])
       .select()
