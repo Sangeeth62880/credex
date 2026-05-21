@@ -5,40 +5,40 @@
 /* ─── Design Tokens ────────────────────────────────────────────────────────── */
 
 :root {
-  /* Backgrounds — layered depth matching credex.rocks light style */
+  /* Backgrounds */
   --bg-base:        #FFFFFF;
-  --bg-surface:     #F4FBF8;
-  --bg-elevated:    #E8F8F1;
-  --bg-overlay:     #CFFDEA;
+  --bg-surface:     #F8FAFC; /* Slate 50 */
+  --bg-elevated:    #F1F5F9; /* Slate 100 */
+  --bg-overlay:     #E2E8F0; /* Slate 200 */
 
-  /* Borders — soft slate-mint boundaries */
-  --border-subtle:  rgba(25, 54, 63, 0.08);
-  --border-default: rgba(25, 54, 63, 0.14);
-  --border-strong:  rgba(25, 54, 63, 0.24);
+  /* Borders — distinct slate boundaries for contrast */
+  --border-subtle:  #E2E8F0; /* Slate 200 */
+  --border-default: #CBD5E1; /* Slate 300 */
+  --border-strong:  #94A3B8; /* Slate 400 */
 
-  /* Text — deep navy-slate text primary and supporting colors */
-  --text-primary:   #19363F;
-  --text-secondary: #364E56;
-  --text-muted:     #788E96;
-  --text-inverse:   #000000;
+  /* Text — deep slate for maximum readability */
+  --text-primary:   #0F172A; /* Slate 900 */
+  --text-secondary: #334155; /* Slate 700 */
+  --text-muted:     #64748B; /* Slate 500 */
+  --text-inverse:   #FFFFFF;
 
-  /* Accent — credex.rocks neon green accent */
-  --accent:         #0FF395;
-  --accent-dim:     rgba(15, 243, 149, 0.12);
-  --accent-hover:   #0BE089;
+  /* Accent — Emerald for high contrast primary actions */
+  --accent:         #059669; /* Emerald 600 */
+  --accent-dim:     #D1FAE5; /* Emerald 100 */
+  --accent-hover:   #047857; /* Emerald 700 */
 
   /* Semantic */
-  --positive:       #086841;
-  --positive-bg:    rgba(8, 104, 65, 0.08);
-  --warning:        #D97706;
-  --warning-bg:     rgba(217, 119, 6, 0.08);
-  --negative:       #DC2626;
-  --negative-bg:    rgba(220, 38, 38, 0.08);
-  --neutral:        #364E56;
+  --positive:       #15803D; /* Green 700 */
+  --positive-bg:    #DCFCE7; /* Green 100 */
+  --warning:        #B45309; /* Amber 700 */
+  --warning-bg:     #FEF3C7; /* Amber 100 */
+  --negative:       #B91C1C; /* Red 700 */
+  --negative-bg:    #FEE2E2; /* Red 100 */
+  --neutral:        #475569; /* Slate 600 */
 
-  /* Special — Credex CTA mint/green button & block accents */
-  --credex-cta-bg:     #ADFBDB;
-  --credex-cta-border: rgba(8, 104, 65, 0.2);
+  /* Special */
+  --credex-cta-bg:     #D1FAE5;
+  --credex-cta-border: #059669;
 
   /* ── shadcn/ui compatibility layer ── */
   --background:             0 0% 100%;
@@ -190,7 +190,7 @@ input[type="number"] {
 
 @layer utilities {
   .savings-gradient {
-    background: linear-gradient(135deg, #086841, #0FF395);
+    background: linear-gradient(135deg, #0F172A 20%, #059669 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

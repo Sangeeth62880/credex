@@ -137,6 +137,7 @@ describe("/api/save-audit", () => {
         input_data: VALID_INPUT,
         result_data: VALID_RESULT,
         total_monthly_savings: VALID_RESULT.totalMonthlySavings,
+        pricing_snapshot_id: "00000000-0000-0000-0000-000000000000",
       },
     ]);
 

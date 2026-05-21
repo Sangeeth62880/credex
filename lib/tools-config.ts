@@ -9,7 +9,7 @@ export const TOOLS: ToolDefinition[] = [
   {
     id: 'cursor',
     name: 'Cursor',
-    logoSrc: '/logos/cursor.svg',
+    logoSrc: 'https://img.icons8.com/ios-filled/50/cursor-ai.png',
     plans: [
       { label: 'Hobby', pricePerSeat: 0 },
       { label: 'Pro', pricePerSeat: 20 },
@@ -20,7 +20,7 @@ export const TOOLS: ToolDefinition[] = [
   {
     id: 'github-copilot',
     name: 'GitHub Copilot',
-    logoSrc: '/logos/github.svg',
+    logoSrc: 'https://img.icons8.com/ios-filled/50/github.png',
     plans: [
       { label: 'Individual', pricePerSeat: 10 },
       { label: 'Business', pricePerSeat: 19 },
@@ -30,7 +30,7 @@ export const TOOLS: ToolDefinition[] = [
   {
     id: 'claude',
     name: 'Claude',
-    logoSrc: '/logos/claude.svg',
+    logoSrc: 'https://img.icons8.com/ios-filled/50/claude-ai.png',
     plans: [
       { label: 'Free', pricePerSeat: 0 },
       { label: 'Pro', pricePerSeat: 20 },
@@ -43,7 +43,7 @@ export const TOOLS: ToolDefinition[] = [
   {
     id: 'chatgpt',
     name: 'ChatGPT',
-    logoSrc: '/logos/openai.svg',
+    logoSrc: 'https://img.icons8.com/ios/50/chatgpt.png',
     plans: [
       { label: 'Plus', pricePerSeat: 20 },
       { label: 'Team', pricePerSeat: 30 },
@@ -54,7 +54,7 @@ export const TOOLS: ToolDefinition[] = [
   {
     id: 'anthropic-api',
     name: 'Anthropic API',
-    logoSrc: '/logos/anthropic.svg',
+    logoSrc: 'https://img.icons8.com/ios-filled/50/claude-ai.png',
     plans: [
       { label: 'Pay-as-you-go', pricePerSeat: 0 },
     ],
@@ -62,7 +62,7 @@ export const TOOLS: ToolDefinition[] = [
   {
     id: 'openai-api',
     name: 'OpenAI API',
-    logoSrc: '/logos/openai.svg',
+    logoSrc: 'https://img.icons8.com/ios/50/chatgpt.png',
     plans: [
       { label: 'Pay-as-you-go', pricePerSeat: 0 },
     ],
@@ -70,7 +70,7 @@ export const TOOLS: ToolDefinition[] = [
   {
     id: 'gemini',
     name: 'Gemini',
-    logoSrc: '/logos/google.svg',
+    logoSrc: 'https://img.icons8.com/ios-filled/50/google-logo.png',
     plans: [
       { label: 'Free', pricePerSeat: 0 },
       { label: 'Advanced', pricePerSeat: 20 },
@@ -81,7 +81,7 @@ export const TOOLS: ToolDefinition[] = [
   {
     id: 'windsurf',
     name: 'Windsurf',
-    logoSrc: '/logos/windsurf.svg',
+    logoSrc: 'https://img.icons8.com/ios-filled/50/windsurf-editor.png',
     plans: [
       { label: 'Free', pricePerSeat: 0 },
       { label: 'Pro', pricePerSeat: 15 },

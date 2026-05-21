@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server";
 // anon client — fine for reading public data (pricing_snapshots has no RLS)
 import { supabase } from "@/lib/supabase";
