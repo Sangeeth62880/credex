@@ -229,6 +229,13 @@ export default function Home() {
           />
         </div>
       </div>
+
+      {/* Footer Link */}
+      <div className="pb-12 text-center relative z-10">
+        <Link href="/changes" className="font-mono text-[12px] text-text-muted hover:text-text-secondary transition-colors underline decoration-border-default hover:decoration-border-strong underline-offset-4">
+          AI pricing changes →
+        </Link>
+      </div>
     </main>
   );
 }

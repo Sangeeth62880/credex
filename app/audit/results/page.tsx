@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
+import Link from "next/link";
 import ResultsHero from "@/components/results/results-hero";
 import AuditCard from "@/components/results/audit-card";
 import LeadCaptureBanner from "@/components/results/results-sidebar";
@@ -10,7 +11,7 @@ import BenchmarkSection from "@/components/results/benchmark-section";
 import ReferralSection from "@/components/results/referral-section";
 import { AuditResult } from "@/lib/audit-engine";
 import { Loader2, AlertCircle, FileDown, Share2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 
 function ResultsContent() {
   const searchParams = useSearchParams();
@@ -111,6 +112,12 @@ function ResultsContent() {
           </div>
           
           <div className="flex items-center gap-2">
+            <Link 
+              href={`/audit/${id}/diff`}
+              className={buttonVariants({ variant: "outline", size: "sm", className: "h-9 border-border-strong bg-bg-surface text-[12px] text-text-primary hover:bg-bg-elevated" })}
+            >
+              Pricing diff
+            </Link>
             <Button 
               variant="outline" 
               size="sm" 
@@ -195,6 +202,13 @@ function ResultsContent() {
             totalAnnualSavings={result.totalAnnualSavings}
             auditId={id!}
           />
+        </div>
+
+        {/* Footer Link */}
+        <div className="mt-16 pb-8 text-center no-print">
+          <Link href="/changes" className="font-mono text-[12px] text-text-muted hover:text-text-secondary transition-colors underline decoration-border-default hover:decoration-border-strong underline-offset-4">
+            See what&apos;s changed in AI pricing this week →
+          </Link>
         </div>
       </div>
     </div>

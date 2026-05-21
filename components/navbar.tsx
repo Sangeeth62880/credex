@@ -23,16 +23,33 @@ export default function Navbar() {
           </span>
         </div>
 
-        {/* Right side: Link back */}
-        <a
-          href="https://credex.rocks"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center font-sans text-[13px] text-text-muted transition-colors duration-150 hover:text-text-secondary"
-        >
-          <ArrowLeft className="mr-1 h-[14px] w-[14px]" />
-          <span>credex.rocks</span>
-        </a>
+        {/* Right side */}
+        <div className="flex items-center gap-4">
+          <Link
+            href="/changes"
+            className="font-sans text-[13px] font-medium text-text-primary transition-colors duration-150 hover:text-text-secondary"
+          >
+            What changed
+          </Link>
+          <Link
+            href="/admin"
+            className="font-sans text-[11px] text-text-muted transition-colors duration-150 hover:text-text-secondary"
+          >
+            Admin
+          </Link>
+
+          <div className="h-4 w-[1px] bg-border-default" />
+
+          <a
+            href="https://credex.rocks"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center font-sans text-[13px] text-text-muted transition-colors duration-150 hover:text-text-secondary"
+          >
+            <ArrowLeft className="mr-1 h-[14px] w-[14px]" />
+            <span>credex.rocks</span>
+          </a>
+        </div>
       </div>
     </nav>
   );
