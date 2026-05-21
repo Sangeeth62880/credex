@@ -1,0 +1,23 @@
+name: Pricing Change Detection
+
+on:
+  schedule:
+    - cron: '0 9 * * *'
+  workflow_dispatch:
+
+jobs:
+  detect-pricing-changes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger detect-changes endpoint
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" \
+            -X POST "${{ secrets.APP_URL }}/api/detect-changes" \
+            -H "Authorization: Bearer ${{ secrets.CRON_SECRET }}" \
+            -H "Content-Type: application/json" \
+            -d '{}')
+          echo "Response: $response"
+          if [ "$response" != "200" ]; then
+            echo "Failed with status $response"
+            exit 1
+          fi
