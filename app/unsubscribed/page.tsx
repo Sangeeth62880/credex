@@ -8,17 +8,8 @@ export const metadata: Metadata = {
 
 export default function UnsubscribedPage() {
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        backgroundColor: "#0A0B0D",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "24px",
-      }}
-    >
-      <div style={{ textAlign: "center", maxWidth: "420px" }}>
+    <div className="min-h-screen bg-bg-base flex items-center justify-center p-6">
+      <div className="text-center max-w-[420px]">
         {/* Checkmark icon */}
         <svg
           width="64"
@@ -26,7 +17,7 @@ export default function UnsubscribedPage() {
           viewBox="0 0 64 64"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          style={{ margin: "0 auto 24px" }}
+          className="mx-auto mb-6"
         >
           <circle
             cx="32"
@@ -34,7 +25,7 @@ export default function UnsubscribedPage() {
             r="30"
             stroke="#00C896"
             strokeWidth="2"
-            opacity="0.3"
+            className="opacity-20"
           />
           <path
             d="M20 33L28 41L44 25"
@@ -45,27 +36,11 @@ export default function UnsubscribedPage() {
           />
         </svg>
 
-        <h1
-          style={{
-            fontFamily: "var(--font-dm-serif), Georgia, serif",
-            fontSize: "28px",
-            color: "#FFFFFF",
-            marginBottom: "12px",
-            fontWeight: 400,
-          }}
-        >
+        <h1 className="font-serif text-[28px] text-text-primary mb-3 font-normal">
           Unsubscribed
         </h1>
 
-        <p
-          style={{
-            fontFamily: "var(--font-mono), Menlo, monospace",
-            fontSize: "13px",
-            lineHeight: "1.6",
-            color: "#8B92A5",
-            marginBottom: "32px",
-          }}
-        >
+        <p className="font-mono text-[13px] leading-relaxed text-text-secondary mb-8">
           You&apos;ve been removed from pricing change notifications.
           <br />
           Your audit is still saved and accessible.
@@ -73,14 +48,7 @@ export default function UnsubscribedPage() {
 
         <Link
           href="/"
-          style={{
-            fontFamily: "var(--font-mono), Menlo, monospace",
-            fontSize: "13px",
-            color: "#00C896",
-            textDecoration: "none",
-            borderBottom: "1px solid rgba(0, 200, 150, 0.3)",
-            paddingBottom: "2px",
-          }}
+          className="font-mono text-[13px] text-[#00C896] no-underline border-b border-[#00C896]/30 pb-0.5 hover:border-[#00C896] transition-colors"
         >
           ← Back to Credex
         </Link>

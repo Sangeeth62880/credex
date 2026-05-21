@@ -24,9 +24,6 @@ export default function AdminPage() {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    // The browser will have already handled Basic auth via the middleware
-    // challenge. The credentials will be sent automatically on subsequent
-    // requests within the session.
     fetch("/api/admin/stats")
       .then((res) => {
         if (!res.ok) throw new Error(`Status ${res.status}`);
@@ -55,18 +52,7 @@ export default function AdminPage() {
 
   if (loading) {
     return (
-      <div
-        style={{
-          minHeight: "100vh",
-          backgroundColor: "#0A0B0D",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontFamily: "var(--font-mono), Menlo, monospace",
-          fontSize: "13px",
-          color: "#4E5568",
-        }}
-      >
+      <div className="min-h-screen bg-bg-base flex items-center justify-center font-mono text-[13px] text-text-muted">
         Loading admin stats...
       </div>
     );
@@ -74,18 +60,7 @@ export default function AdminPage() {
 
   if (error) {
     return (
-      <div
-        style={{
-          minHeight: "100vh",
-          backgroundColor: "#0A0B0D",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontFamily: "var(--font-mono), Menlo, monospace",
-          fontSize: "13px",
-          color: "#FF5C5C",
-        }}
-      >
+      <div className="min-h-screen bg-bg-base flex items-center justify-center font-mono text-[13px] text-negative">
         Error loading stats: {error}
       </div>
     );
@@ -106,78 +81,30 @@ export default function AdminPage() {
   ];
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        backgroundColor: "#0A0B0D",
-        color: "#E5E7EB",
-        padding: "48px 24px 80px",
-      }}
-    >
-      <div style={{ maxWidth: "860px", margin: "0 auto" }}>
+    <div className="min-h-screen bg-bg-base text-text-primary px-6 py-12 pb-20">
+      <div className="mx-auto max-w-[860px]">
         {/* Header */}
-        <div
-          style={{
-            fontFamily: "var(--font-mono), Menlo, monospace",
-            fontSize: "12px",
-            color: "#00C896",
-            textTransform: "uppercase",
-            letterSpacing: "0.08em",
-            marginBottom: "8px",
-          }}
-        >
+        <div className="mb-2 font-mono text-[12px] uppercase tracking-[0.08em] text-[#00C896]">
           Admin
         </div>
-        <h1
-          style={{
-            fontFamily: "var(--font-dm-serif), Georgia, serif",
-            fontSize: "32px",
-            color: "#FFFFFF",
-            fontWeight: 400,
-            marginBottom: "36px",
-          }}
-        >
+        <h1 className="mb-9 font-serif text-[32px] text-text-primary font-normal">
           Dashboard
         </h1>
 
         {/* Stat Cards */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
-            gap: "12px",
-            marginBottom: "48px",
-          }}
-        >
+        <div className="mb-12 grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-3">
           {statCards.map((card) => (
             <div
               key={card.label}
-              style={{
-                border: "1px solid #1E2229",
-                borderRadius: "8px",
-                padding: "20px",
-                backgroundColor: "#0F1114",
-              }}
+              className="rounded-lg border border-border-default bg-bg-surface p-5"
             >
-              <div
-                style={{
-                  fontFamily: "var(--font-mono), Menlo, monospace",
-                  fontSize: "10px",
-                  color: "#4E5568",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                  marginBottom: "8px",
-                }}
-              >
+              <div className="mb-2 font-mono text-[10px] uppercase tracking-[0.05em] text-text-muted">
                 {card.label}
               </div>
               <div
-                style={{
-                  fontFamily: "var(--font-dm-serif), Georgia, serif",
-                  fontSize: "28px",
-                  color: card.highlight ? "#00C896" : "#FFFFFF",
-                  lineHeight: 1,
-                }}
+                className={`font-serif text-[28px] leading-none ${
+                  card.highlight ? "text-[#00C896]" : "text-text-primary"
+                }`}
               >
                 {card.value}
               </div>
@@ -186,83 +113,29 @@ export default function AdminPage() {
         </div>
 
         {/* Recent Pricing Snapshots */}
-        <section style={{ marginBottom: "48px" }}>
-          <h2
-            style={{
-              fontFamily: "var(--font-mono), Menlo, monospace",
-              fontSize: "12px",
-              color: "#8B92A5",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              marginBottom: "16px",
-            }}
-          >
+        <section className="mb-12">
+          <h2 className="mb-4 font-mono text-[12px] uppercase tracking-[0.08em] text-text-secondary">
             Recent pricing snapshots
           </h2>
 
           {stats.recentSnapshots.length === 0 ? (
-            <div
-              style={{
-                fontFamily: "var(--font-mono), Menlo, monospace",
-                fontSize: "12px",
-                color: "#4E5568",
-                padding: "24px",
-                textAlign: "center",
-                border: "1px solid #1E2229",
-                borderRadius: "8px",
-              }}
-            >
+            <div className="rounded-lg border border-border-default p-6 text-center font-mono text-[12px] text-text-muted">
               No snapshots yet
             </div>
           ) : (
-            <div
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                gap: "8px",
-              }}
-            >
+            <div className="flex flex-col gap-2">
               {stats.recentSnapshots.map((snapshot) => (
                 <div
                   key={snapshot.id}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "16px",
-                    padding: "12px 16px",
-                    border: "1px solid #1E2229",
-                    borderRadius: "6px",
-                    backgroundColor: "#0F1114",
-                  }}
+                  className="flex items-center gap-4 rounded-md border border-border-default bg-bg-surface px-4 py-3"
                 >
-                  <span
-                    style={{
-                      fontFamily: "var(--font-mono), Menlo, monospace",
-                      fontSize: "13px",
-                      color: "#00C896",
-                      minWidth: "100px",
-                    }}
-                  >
+                  <span className="min-w-[100px] font-mono text-[13px] text-[#00C896]">
                     v{snapshot.version}
                   </span>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-mono), Menlo, monospace",
-                      fontSize: "11px",
-                      color: "#8B92A5",
-                      flex: 1,
-                    }}
-                  >
+                  <span className="flex-1 font-mono text-[11px] text-text-secondary">
                     {snapshot.notes || "—"}
                   </span>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-mono), Menlo, monospace",
-                      fontSize: "11px",
-                      color: "#4E5568",
-                      whiteSpace: "nowrap",
-                    }}
-                  >
+                  <span className="whitespace-nowrap font-mono text-[11px] text-text-muted">
                     {new Date(snapshot.created_at).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
@@ -276,69 +149,24 @@ export default function AdminPage() {
 
         {/* Manual Trigger */}
         <section>
-          <h2
-            style={{
-              fontFamily: "var(--font-mono), Menlo, monospace",
-              fontSize: "12px",
-              color: "#8B92A5",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              marginBottom: "16px",
-            }}
-          >
+          <h2 className="mb-4 font-mono text-[12px] uppercase tracking-[0.08em] text-text-secondary">
             Manual trigger
           </h2>
 
-          <div
-            style={{
-              border: "1px solid #1E2229",
-              borderRadius: "8px",
-              padding: "20px",
-              backgroundColor: "#0F1114",
-            }}
-          >
-            <div
-              style={{
-                fontFamily: "var(--font-mono), Menlo, monospace",
-                fontSize: "12px",
-                color: "#8B92A5",
-                marginBottom: "12px",
-              }}
-            >
+          <div className="rounded-lg border border-border-default bg-bg-surface p-5">
+            <div className="mb-3 font-mono text-[12px] text-text-secondary">
               Run this to trigger pricing change detection manually:
             </div>
 
-            <pre
-              style={{
-                fontFamily: "var(--font-mono), Menlo, monospace",
-                fontSize: "12px",
-                color: "#E5E7EB",
-                backgroundColor: "#0A0B0D",
-                padding: "16px",
-                borderRadius: "6px",
-                border: "1px solid #1E2229",
-                overflow: "auto",
-                marginBottom: "12px",
-                whiteSpace: "pre-wrap",
-                wordBreak: "break-all",
-              }}
-            >
+            <pre className="mb-3 overflow-auto whitespace-pre-wrap break-all rounded-md border border-border-subtle bg-bg-base p-4 font-mono text-[12px] text-text-primary">
               {curlCommand}
             </pre>
 
             <button
               onClick={handleCopy}
-              style={{
-                fontFamily: "var(--font-mono), Menlo, monospace",
-                fontSize: "12px",
-                color: copied ? "#00C896" : "#8B92A5",
-                backgroundColor: "transparent",
-                border: "1px solid #1E2229",
-                borderRadius: "4px",
-                padding: "6px 12px",
-                cursor: "pointer",
-                transition: "color 0.2s",
-              }}
+              className={`rounded-md border border-border-default bg-transparent px-3 py-1.5 font-mono text-[12px] transition-colors cursor-pointer ${
+                copied ? "text-[#00C896]" : "text-text-secondary"
+              }`}
             >
               {copied ? "✓ Copied" : "Copy to clipboard"}
             </button>

@@ -27,17 +27,8 @@ function ToolLogo({ toolId, size = 22 }: { toolId: string; size?: number }) {
   if (!toolDef?.logoSrc) {
     return (
       <div
-        style={{
-          width: size,
-          height: size,
-          borderRadius: "4px",
-          backgroundColor: "#1E2229",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          fontSize: "10px",
-          color: "#4E5568",
-        }}
+        style={{ width: size, height: size }}
+        className="rounded bg-bg-elevated flex items-center justify-center text-[10px] text-text-muted border border-border-default"
       >
         {toolId.charAt(0).toUpperCase()}
       </div>
@@ -50,7 +41,7 @@ function ToolLogo({ toolId, size = 22 }: { toolId: string; size?: number }) {
       alt={toolDef.name}
       width={size}
       height={size}
-      style={{ borderRadius: "4px", filter: "invert(1)" }}
+      className="rounded object-contain"
     />
   );
 }
@@ -61,34 +52,22 @@ function StatusBadge({ status }: { status: ToolDiff["status"] }) {
   const config = {
     changed: {
       text: "Updated",
-      color: "#F5A623",
-      bg: "rgba(245, 166, 35, 0.2)",
+      className: "text-[#F5A623] bg-[#F5A623]/10 border border-[#F5A623]/20",
     },
     new: {
       text: "New",
-      color: "#00C896",
-      bg: "rgba(0, 200, 150, 0.2)",
+      className: "text-[#00C896] bg-[#00C896]/10 border border-[#00C896]/20",
     },
     same: {
       text: "Unchanged",
-      color: "#4E5568",
-      bg: "transparent",
+      className: "text-text-muted bg-transparent border border-transparent",
     },
   };
 
   const c = config[status];
   return (
     <span
-      style={{
-        fontFamily: "var(--font-mono), Menlo, monospace",
-        fontSize: "10px",
-        textTransform: "uppercase",
-        letterSpacing: "0.05em",
-        color: c.color,
-        backgroundColor: c.bg,
-        padding: "2px 8px",
-        borderRadius: "4px",
-      }}
+      className={`font-mono text-[10px] uppercase tracking-[0.05em] px-2 py-0.5 rounded ${c.className}`}
     >
       {c.text}
     </span>
@@ -103,173 +82,66 @@ function DiffCard({ tool }: { tool: ToolDiff }) {
     : tool.new.monthlySavings;
 
   return (
-    <div
-      style={{
-        border: "1px solid #1E2229",
-        borderRadius: "12px",
-        marginBottom: "16px",
-        overflow: "hidden",
-        backgroundColor: "#0F1114",
-      }}
-    >
+    <div className="mb-4 overflow-hidden rounded-xl border border-border-strong bg-bg-surface shadow-sm">
       {/* Card Header */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "10px",
-          padding: "16px 20px",
-          borderBottom: "1px solid #1E2229",
-        }}
-      >
+      <div className="flex items-center gap-2.5 border-b border-border-default p-4">
         <ToolLogo toolId={tool.toolId} size={22} />
-        <span
-          style={{
-            fontFamily: "var(--font-geist), system-ui, sans-serif",
-            fontSize: "15px",
-            color: "#FFFFFF",
-            fontWeight: 500,
-            flex: 1,
-          }}
-        >
+        <span className="flex-1 font-sans text-[15px] font-medium text-text-primary">
           {tool.toolName}
         </span>
         <StatusBadge status={tool.status} />
       </div>
 
       {/* Two-column grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-        }}
-      >
+      <div className="grid grid-cols-2">
         {/* BEFORE column */}
         <div
-          style={{
-            padding: "20px",
-            borderRight: "1px solid #1E2229",
-            opacity: tool.status === "changed" ? 0.6 : 1,
-          }}
+          className={`border-r border-border-default p-5 ${
+            tool.status === "changed" ? "opacity-60 bg-bg-elevated" : "bg-bg-base"
+          }`}
         >
-          <div
-            style={{
-              fontFamily: "var(--font-mono), Menlo, monospace",
-              fontSize: "9px",
-              color: "#4E5568",
-              textTransform: "uppercase",
-              letterSpacing: "0.05em",
-              marginBottom: "12px",
-            }}
-          >
+          <div className="mb-3 font-mono text-[9px] uppercase tracking-[0.05em] text-text-muted">
             Before
           </div>
 
           {tool.old ? (
             <>
-              <div
-                style={{
-                  fontFamily: "var(--font-mono), Menlo, monospace",
-                  fontSize: "11px",
-                  color: "#8B92A5",
-                  marginBottom: "8px",
-                  display: "inline-block",
-                  padding: "2px 6px",
-                  borderRadius: "3px",
-                  backgroundColor: "rgba(139, 146, 165, 0.1)",
-                }}
-              >
+              <div className="mb-2 inline-block rounded border border-border-default bg-bg-surface px-1.5 py-0.5 font-mono text-[11px] text-text-secondary">
                 {tool.old.badge}
               </div>
-              <div
-                style={{
-                  fontFamily: "var(--font-dm-serif), Georgia, serif",
-                  fontSize: "22px",
-                  color: "#FFFFFF",
-                  marginBottom: "8px",
-                }}
-              >
+              <div className="mb-2 font-serif text-[22px] text-text-primary">
                 ${tool.old.monthlySavings.toFixed(0)}
-                <span
-                  style={{
-                    fontFamily: "var(--font-mono), Menlo, monospace",
-                    fontSize: "11px",
-                    color: "#4E5568",
-                  }}
-                >
+                <span className="font-mono text-[11px] text-text-muted ml-1">
                   /mo
                 </span>
               </div>
-              <div
-                style={{
-                  fontFamily: "var(--font-mono), Menlo, monospace",
-                  fontSize: "11px",
-                  color: "#4E5568",
-                  lineHeight: "1.5",
-                }}
-              >
+              <div className="font-mono text-[11px] leading-relaxed text-text-muted">
                 {tool.old.reason}
               </div>
             </>
           ) : (
-            <div
-              style={{
-                fontFamily: "var(--font-mono), Menlo, monospace",
-                fontSize: "11px",
-                color: "#4E5568",
-                fontStyle: "italic",
-              }}
-            >
+            <div className="font-mono text-[11px] italic text-text-muted">
               Not in original audit
             </div>
           )}
         </div>
 
         {/* AFTER column */}
-        <div style={{ padding: "20px" }}>
-          <div
-            style={{
-              fontFamily: "var(--font-mono), Menlo, monospace",
-              fontSize: "9px",
-              color: "#00C896",
-              textTransform: "uppercase",
-              letterSpacing: "0.05em",
-              marginBottom: "12px",
-            }}
-          >
+        <div className="p-5 bg-bg-base">
+          <div className="mb-3 font-mono text-[9px] uppercase tracking-[0.05em] text-[#00C896]">
             Now
           </div>
 
-          <div
-            style={{
-              fontFamily: "var(--font-mono), Menlo, monospace",
-              fontSize: "11px",
-              color: "#8B92A5",
-              marginBottom: "8px",
-              display: "inline-block",
-              padding: "2px 6px",
-              borderRadius: "3px",
-              backgroundColor: "rgba(139, 146, 165, 0.1)",
-            }}
-          >
+          <div className="mb-2 inline-block rounded border border-border-default bg-bg-surface px-1.5 py-0.5 font-mono text-[11px] text-text-secondary">
             {tool.new.badge}
           </div>
           <div
-            style={{
-              fontFamily: "var(--font-dm-serif), Georgia, serif",
-              fontSize: "22px",
-              color: tool.new.monthlySavings > 0 ? "#00C896" : "#FFFFFF",
-              marginBottom: "8px",
-            }}
+            className={`mb-2 font-serif text-[22px] ${
+              tool.new.monthlySavings > 0 ? "text-[#00C896]" : "text-text-primary"
+            }`}
           >
             ${tool.new.monthlySavings.toFixed(0)}
-            <span
-              style={{
-                fontFamily: "var(--font-mono), Menlo, monospace",
-                fontSize: "11px",
-                color: "#4E5568",
-              }}
-            >
+            <span className="font-mono text-[11px] text-text-muted ml-1">
               /mo
             </span>
           </div>
@@ -277,15 +149,9 @@ function DiffCard({ tool }: { tool: ToolDiff }) {
           {/* Savings delta line */}
           {tool.old && savingsDelta !== 0 && (
             <div
-              style={{
-                fontFamily: "var(--font-mono), Menlo, monospace",
-                fontSize: "11px",
-                color: savingsDelta > 0 ? "#00C896" : "#FF5C5C",
-                marginBottom: "8px",
-                display: "flex",
-                alignItems: "center",
-                gap: "4px",
-              }}
+              className={`mb-2 flex items-center gap-1 font-mono text-[11px] ${
+                savingsDelta > 0 ? "text-[#00C896]" : "text-[#FF5C5C]"
+              }`}
             >
               <svg
                 width="12"
@@ -307,14 +173,7 @@ function DiffCard({ tool }: { tool: ToolDiff }) {
             </div>
           )}
 
-          <div
-            style={{
-              fontFamily: "var(--font-mono), Menlo, monospace",
-              fontSize: "11px",
-              color: "#8B92A5",
-              lineHeight: "1.5",
-            }}
-          >
+          <div className="font-mono text-[11px] leading-relaxed text-text-secondary">
             {tool.new.reason}
           </div>
         </div>
@@ -336,17 +195,8 @@ export function DiffClient({ changedTools, sameTools, auditId }: DiffClientProps
     <>
       {/* Changed tools section */}
       {changedTools.length > 0 && (
-        <section style={{ marginBottom: "48px" }}>
-          <div
-            style={{
-              fontFamily: "var(--font-mono), Menlo, monospace",
-              fontSize: "11px",
-              color: "#F5A623",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              marginBottom: "20px",
-            }}
-          >
+        <section className="mb-12">
+          <div className="mb-5 font-mono text-[11px] uppercase tracking-[0.08em] text-[#F5A623]">
             {changedTools.length} Recommendation{changedTools.length !== 1 ? "s" : ""}{" "}
             changed
           </div>
@@ -358,48 +208,20 @@ export function DiffClient({ changedTools, sameTools, auditId }: DiffClientProps
 
       {/* Same tools section */}
       {sameTools.length > 0 && (
-        <section style={{ marginBottom: "48px", opacity: 0.5 }}>
-          <div
-            style={{
-              fontFamily: "var(--font-mono), Menlo, monospace",
-              fontSize: "11px",
-              color: "#4E5568",
-              textTransform: "uppercase",
-              letterSpacing: "0.08em",
-              marginBottom: "20px",
-            }}
-          >
+        <section className="mb-12 opacity-70">
+          <div className="mb-5 font-mono text-[11px] uppercase tracking-[0.08em] text-text-secondary">
             {sameTools.length} Unchanged
           </div>
           {sameTools.map((tool) => (
             <div
               key={tool.toolId}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "10px",
-                padding: "12px 16px",
-                borderBottom: "1px solid #1E2229",
-              }}
+              className="flex items-center gap-2.5 border border-border-default py-3 px-4 bg-bg-surface rounded-md mb-2"
             >
               <ToolLogo toolId={tool.toolId} size={20} />
-              <span
-                style={{
-                  fontFamily: "var(--font-geist), system-ui, sans-serif",
-                  fontSize: "14px",
-                  color: "#8B92A5",
-                  flex: 1,
-                }}
-              >
+              <span className="flex-1 font-sans text-[14px] text-text-secondary">
                 {tool.toolName}
               </span>
-              <span
-                style={{
-                  fontFamily: "var(--font-mono), Menlo, monospace",
-                  fontSize: "11px",
-                  color: "#4E5568",
-                }}
-              >
+              <span className="font-mono text-[11px] text-text-muted">
                 No change
               </span>
             </div>
@@ -408,49 +230,16 @@ export function DiffClient({ changedTools, sameTools, auditId }: DiffClientProps
       )}
 
       {/* Re-run CTA */}
-      <div
-        style={{
-          border: "1px solid #1E2229",
-          borderRadius: "12px",
-          padding: "32px",
-          textAlign: "center",
-          backgroundColor: "#0F1114",
-        }}
-      >
-        <div
-          style={{
-            fontFamily: "var(--font-geist), system-ui, sans-serif",
-            fontSize: "16px",
-            color: "#FFFFFF",
-            fontWeight: 500,
-            marginBottom: "8px",
-          }}
-        >
+      <div className="rounded-xl border border-border-default bg-bg-surface p-8 text-center shadow-sm">
+        <div className="mb-2 font-sans text-[16px] font-medium text-text-primary">
           Want to start fresh with current pricing?
         </div>
-        <div
-          style={{
-            fontFamily: "var(--font-mono), Menlo, monospace",
-            fontSize: "12px",
-            color: "#4E5568",
-            marginBottom: "20px",
-          }}
-        >
+        <div className="mb-5 font-mono text-[12px] text-text-muted">
           Your form data is saved. Re-run in under a minute.
         </div>
         <a
           href="/"
-          style={{
-            display: "inline-block",
-            padding: "10px 24px",
-            backgroundColor: "#00C896",
-            color: "#0A0B0D",
-            fontFamily: "var(--font-mono), Menlo, monospace",
-            fontSize: "13px",
-            fontWeight: 600,
-            borderRadius: "6px",
-            textDecoration: "none",
-          }}
+          className="inline-block rounded-md bg-[#00C896] px-6 py-2.5 font-mono text-[13px] font-semibold text-white no-underline hover:bg-[#00C896]/90 shadow-sm hover:-translate-y-0.5 transition-all"
         >
           Run new audit →
         </a>

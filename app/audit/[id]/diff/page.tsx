@@ -41,8 +41,8 @@ export default async function DiffPage({ params }: DiffPageProps) {
   const sameTools = toolDiffs.filter((t) => t.status === "same");
 
   const deltaSign = savingsDelta > 0 ? "+" : savingsDelta < 0 ? "" : "";
-  const deltaColor =
-    savingsDelta > 0 ? "#00C896" : savingsDelta < 0 ? "#FF5C5C" : "#4E5568";
+  const deltaColorClass =
+    savingsDelta > 0 ? "text-positive" : savingsDelta < 0 ? "text-negative" : "text-text-muted";
 
   const formattedDate = new Date(createdAt).toLocaleDateString("en-US", {
     month: "short",
@@ -51,65 +51,29 @@ export default async function DiffPage({ params }: DiffPageProps) {
   });
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        backgroundColor: "#0A0B0D",
-        color: "#E5E7EB",
-      }}
-    >
+    <div className="min-h-screen bg-bg-base text-text-primary">
       <TrackDiffView auditId={params.id} />
 
       {/* ─── HEADER ─── */}
-      <header
-        style={{
-          borderBottom: "1px solid #1E2229",
-          padding: "32px 24px",
-        }}
-      >
-        <div style={{ maxWidth: "960px", margin: "0 auto" }}>
+      <header className="border-b border-border-subtle px-6 py-8">
+        <div className="mx-auto max-w-[960px]">
           {/* Breadcrumb */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "8px",
-              marginBottom: "20px",
-              fontFamily: "var(--font-mono), Menlo, monospace",
-              fontSize: "13px",
-            }}
-          >
-            <a
-              href={`/audit/results?id=${params.id}`}
-              style={{ color: "#8B92A5", textDecoration: "none" }}
-            >
+          <div className="mb-5 flex items-center gap-2 font-mono text-[13px]">
+            <a href={`/audit/results?id=${params.id}`} className="text-text-muted no-underline hover:text-text-primary transition-colors">
               ← Original audit
             </a>
-            <span style={{ color: "#4E5568" }}>/</span>
-            <span style={{ color: "#00C896" }}>Pricing update</span>
+            <span className="text-border-strong">/</span>
+            <span className="text-accent">Pricing update</span>
           </div>
 
           {/* Warning badge */}
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: "8px",
-              padding: "6px 14px",
-              border: "1px solid rgba(245, 166, 35, 0.3)",
-              borderRadius: "999px",
-              marginBottom: "28px",
-              color: "#F5A623",
-              fontFamily: "var(--font-mono), Menlo, monospace",
-              fontSize: "12px",
-            }}
-          >
+          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-warning/30 bg-warning-bg px-3.5 py-1.5 font-mono text-[12px] text-warning">
             <svg
               width="16"
               height="16"
               viewBox="0 0 24 24"
               fill="none"
-              stroke="#F5A623"
+              stroke="currentColor"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -122,44 +86,14 @@ export default async function DiffPage({ params }: DiffPageProps) {
           </div>
 
           {/* Main stats row */}
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-end",
-              flexWrap: "wrap",
-              gap: "24px",
-            }}
-          >
+          <div className="flex flex-wrap items-end justify-between gap-6">
             {/* Savings delta headline */}
             <div>
-              <div
-                style={{
-                  fontFamily: "var(--font-mono), Menlo, monospace",
-                  fontSize: "11px",
-                  color: "#8B92A5",
-                  textTransform: "uppercase" as const,
-                  letterSpacing: "0.05em",
-                  marginBottom: "4px",
-                }}
-              >
+              <div className="mb-1 font-mono text-[11px] uppercase tracking-[0.05em] text-text-muted">
                 Savings delta
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "12px",
-                }}
-              >
-                <span
-                  style={{
-                    fontFamily: "var(--font-dm-serif), Georgia, serif",
-                    fontSize: "56px",
-                    color: deltaColor,
-                    lineHeight: 1,
-                  }}
-                >
+              <div className="flex items-center gap-3">
+                <span className={`font-serif text-[56px] leading-none ${deltaColorClass}`}>
                   {savingsDelta === 0
                     ? "—"
                     : `${deltaSign}$${Math.abs(savingsDelta).toFixed(0)}`}
@@ -170,7 +104,8 @@ export default async function DiffPage({ params }: DiffPageProps) {
                     height="24"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke={deltaColor}
+                    stroke="currentColor"
+                    className={deltaColorClass}
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -189,100 +124,35 @@ export default async function DiffPage({ params }: DiffPageProps) {
                   </svg>
                 )}
               </div>
-              <span
-                style={{
-                  fontFamily: "var(--font-mono), Menlo, monospace",
-                  fontSize: "11px",
-                  color: "#4E5568",
-                }}
-              >
+              <span className="font-mono text-[11px] text-text-muted">
                 /month
               </span>
             </div>
 
             {/* Before / After stat boxes */}
-            <div style={{ display: "flex", gap: "16px" }}>
+            <div className="flex gap-4">
               {/* Before box */}
-              <div
-                style={{
-                  opacity: 0.5,
-                  padding: "16px 20px",
-                  border: "1px solid #1E2229",
-                  borderRadius: "8px",
-                  minWidth: "140px",
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: "var(--font-mono), Menlo, monospace",
-                    fontSize: "9px",
-                    color: "#4E5568",
-                    textTransform: "uppercase" as const,
-                    letterSpacing: "0.05em",
-                    marginBottom: "4px",
-                  }}
-                >
+              <div className="min-w-[140px] rounded-lg border border-border-default bg-bg-surface p-4 opacity-75">
+                <div className="mb-1 font-mono text-[9px] uppercase tracking-[0.05em] text-text-muted">
                   Before
                 </div>
-                <div
-                  style={{
-                    fontFamily: "var(--font-dm-serif), Georgia, serif",
-                    fontSize: "28px",
-                    color: "#FFFFFF",
-                    lineHeight: 1,
-                  }}
-                >
+                <div className="font-serif text-[28px] leading-none text-text-primary">
                   ${oldResult.totalMonthlySavings.toFixed(0)}
                 </div>
-                <div
-                  style={{
-                    fontFamily: "var(--font-mono), Menlo, monospace",
-                    fontSize: "9px",
-                    color: "#4E5568",
-                  }}
-                >
+                <div className="font-mono text-[9px] text-text-muted">
                   /mo savings
                 </div>
               </div>
 
               {/* After box */}
-              <div
-                style={{
-                  padding: "16px 20px",
-                  border: "1px solid #1E2229",
-                  borderRadius: "8px",
-                  minWidth: "140px",
-                }}
-              >
-                <div
-                  style={{
-                    fontFamily: "var(--font-mono), Menlo, monospace",
-                    fontSize: "9px",
-                    color: "#00C896",
-                    textTransform: "uppercase" as const,
-                    letterSpacing: "0.05em",
-                    marginBottom: "4px",
-                  }}
-                >
+              <div className="min-w-[140px] rounded-lg border border-accent/20 bg-accent-dim p-4">
+                <div className="mb-1 font-mono text-[9px] uppercase tracking-[0.05em] text-accent">
                   Now
                 </div>
-                <div
-                  style={{
-                    fontFamily: "var(--font-dm-serif), Georgia, serif",
-                    fontSize: "28px",
-                    color: "#FFFFFF",
-                    lineHeight: 1,
-                  }}
-                >
+                <div className="font-serif text-[28px] leading-none text-text-primary">
                   ${newResult.totalMonthlySavings.toFixed(0)}
                 </div>
-                <div
-                  style={{
-                    fontFamily: "var(--font-mono), Menlo, monospace",
-                    fontSize: "9px",
-                    color: "#4E5568",
-                  }}
-                >
+                <div className="font-mono text-[9px] text-text-muted">
                   /mo savings
                 </div>
               </div>
@@ -290,22 +160,14 @@ export default async function DiffPage({ params }: DiffPageProps) {
           </div>
 
           {/* Version info */}
-          <div
-            style={{
-              fontFamily: "var(--font-mono), Menlo, monospace",
-              fontSize: "11px",
-              color: "#4E5568",
-              marginTop: "20px",
-            }}
-          >
-            Audit created: {formattedDate} · Pricing: {snapshotVersion} →
-            current ({PRICING_VERSION})
+          <div className="mt-5 font-mono text-[11px] text-text-muted">
+            Audit created: {formattedDate} · Pricing: {snapshotVersion} → current ({PRICING_VERSION})
           </div>
         </div>
       </header>
 
       {/* ─── BODY ─── */}
-      <main style={{ maxWidth: "960px", margin: "0 auto", padding: "40px 24px 80px" }}>
+      <main className="mx-auto max-w-[960px] px-6 py-10 pb-20">
         <DiffClient
           changedTools={changedTools}
           sameTools={sameTools}
