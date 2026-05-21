@@ -74,7 +74,7 @@ Be direct, not salesy. Speak like a knowledgeable peer, not a vendor. Return ONL
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "llama3-8b-8192", // Standard fast Llama 3 model
+        model: "llama-3.1-8b-instant", // Standard fast Llama 3.1 model
         messages: [{ role: "user", content: prompt }],
         temperature: 0.5,
         max_tokens: 300,
