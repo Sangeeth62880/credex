@@ -9,8 +9,8 @@ const mockEq = jest.fn();
 const mockSingle = jest.fn();
 const mockFrom = jest.fn();
 
-jest.mock("@/lib/supabase", () => ({
-  supabase: {
+jest.mock("@supabase/supabase-js", () => ({
+  createClient: jest.fn(() => ({
     from: (...args: any[]) => {
       mockFrom(...args);
       return {
@@ -27,7 +27,7 @@ jest.mock("@/lib/supabase", () => ({
         },
       };
     },
-  },
+  })),
 }));
 
 import { GET } from "../app/api/get-audit/route";
