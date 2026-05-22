@@ -4,44 +4,28 @@ import type { NextRequest } from "next/server";
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Only protect /admin routes
-  if (pathname.startsWith("/admin")) {
-    const authHeader = request.headers.get("authorization");
-    const adminPassword = process.env.ADMIN_PASSWORD;
+  // Protect all /admin routes except /admin/login
+  if (pathname.startsWith("/admin") && pathname !== "/admin/login") {
+    const sessionCookie = request.cookies.get("credex_admin_session");
 
-    if (!adminPassword) {
-      console.warn("[middleware] ADMIN_PASSWORD not set — blocking admin access");
-      return new NextResponse("Server configuration error", { status: 500 });
+    if (!sessionCookie || sessionCookie.value !== "authenticated") {
+      const loginUrl = new URL("/admin/login", request.url);
+      return NextResponse.redirect(loginUrl);
     }
+  }
 
-    if (!authHeader || !authHeader.startsWith("Basic ")) {
-      return new NextResponse("Authentication required", {
-        status: 401,
-        headers: {
-          "WWW-Authenticate": 'Basic realm="Credex Admin"',
-        },
-      });
+  // Protect /api/admin routes except /api/admin/login
+  if (pathname.startsWith("/api/admin") && pathname !== "/api/admin/login" && pathname !== "/api/admin/logout") {
+    const sessionCookie = request.cookies.get("credex_admin_session");
+
+    if (!sessionCookie || sessionCookie.value !== "authenticated") {
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
-    const base64Credentials = authHeader.split(" ")[1];
-    const credentials = atob(base64Credentials);
-    const [username, password] = credentials.split(":");
-
-    if (username !== "admin" || password !== adminPassword) {
-      return new NextResponse("Invalid credentials", {
-        status: 401,
-        headers: {
-          "WWW-Authenticate": 'Basic realm="Credex Admin"',
-        },
-      });
-    }
-
-    return NextResponse.next();
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: ["/admin/:path*", "/api/admin/:path*"],
 };

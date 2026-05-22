@@ -79,14 +79,14 @@ export default async function ChangesPage() {
         </h1>
 
         {/* Subtext */}
-        <p className="mb-10 max-w-[540px] font-mono text-[13px] leading-[1.6] text-text-secondary">
+        <p className="mb-10 max-w-[540px] font-sans text-[15px] leading-[1.6] text-text-secondary">
           Tracked automatically. Every pricing version that has affected stored
           audits.
         </p>
 
         {/* Stats row */}
         {emailCount > 0 && (
-          <div className="mb-8 inline-flex items-center gap-1.5 rounded-full border border-border-default px-3.5 py-1.5 font-mono text-[11px] text-text-muted">
+          <div className="mb-8 inline-flex items-center gap-1.5 rounded-full border border-border-default px-3.5 py-1.5 font-sans text-[13px] text-text-muted">
             <span className="font-semibold text-[#00C896]">{emailCount}</span>{" "}
             notifications sent in last 7 days
           </div>
@@ -94,7 +94,7 @@ export default async function ChangesPage() {
 
         {/* Snapshots list */}
         {snapshots.length === 0 ? (
-          <div className="py-16 text-center font-mono text-[13px] text-text-muted">
+          <div className="py-16 text-center font-sans text-[14px] text-text-muted">
             No pricing changes tracked yet.
           </div>
         ) : (
@@ -122,12 +122,12 @@ export default async function ChangesPage() {
                         v{snapshot.version}
                       </span>
                     </div>
-                    <div className="whitespace-nowrap font-mono text-[11px] text-text-muted">
+                    <div className="whitespace-nowrap font-sans text-[12px] text-text-muted">
                       {date}
                     </div>
                   </div>
                   {snapshot.notes && (
-                    <div className="font-mono text-[12px] leading-[1.5] text-text-secondary">
+                    <div className="font-sans text-[14px] leading-[1.5] text-text-secondary">
                       {snapshot.notes}
                     </div>
                   )}
@@ -141,7 +141,7 @@ export default async function ChangesPage() {
         <div className="text-center">
           <Link
             href="/"
-            className="font-mono text-[13px] text-[#00C896] no-underline border-b border-[#00C896]/30 pb-0.5 hover:border-[#00C896] transition-colors"
+            className="font-sans text-[14px] font-medium text-[#00C896] no-underline border-b border-[#00C896]/30 pb-0.5 hover:border-[#00C896] transition-colors"
           >
             Run your free audit →
           </Link>

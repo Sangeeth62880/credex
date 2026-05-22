@@ -16,7 +16,7 @@ const TOOL_LOGOS = [
   { id: "claude",         name: "Claude",         src: "/logos/claude.svg"   },
   { id: "github-copilot", name: "GitHub Copilot", src: "/logos/github.svg"   },
   { id: "openai",         name: "ChatGPT",        src: "/logos/openai.svg"   },
-  { id: "gemini",         name: "Gemini",         src: "/logos/google.svg"   },
+  { id: "gemini",         name: "Gemini",         src: "/logos/gemini-color.svg"   },
   { id: "windsurf",       name: "Windsurf",       src: "/logos/windsurf.svg" },
   { id: "anthropic",      name: "Anthropic API",  src: "/logos/anthropic.svg"},
 ];
@@ -209,7 +209,7 @@ export default function Home() {
                   alt={tool.name}
                   width={20}
                   height={20}
-                  className="object-contain opacity-80"
+                  className="object-contain"
                 />
                 <span className="font-mono text-[12px] font-medium text-text-muted whitespace-nowrap">
                   {tool.name}

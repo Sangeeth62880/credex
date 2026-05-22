@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface AdminStats {
   totalAudits: number;
@@ -22,6 +23,13 @@ export default function AdminPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+  const router = useRouter();
+
+  const handleLogout = async () => {
+    await fetch("/api/admin/logout", { method: "POST" });
+    router.push("/admin/login");
+    router.refresh();
+  };
 
   useEffect(() => {
     fetch("/api/admin/stats")
@@ -52,7 +60,7 @@ export default function AdminPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-bg-base flex items-center justify-center font-mono text-[13px] text-text-muted">
+      <div className="min-h-screen bg-bg-base flex items-center justify-center font-sans text-[14px] text-text-muted">
         Loading admin stats...
       </div>
     );
@@ -60,7 +68,7 @@ export default function AdminPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-bg-base flex items-center justify-center font-mono text-[13px] text-negative">
+      <div className="min-h-screen bg-bg-base flex items-center justify-center font-sans text-[14px] text-negative">
         Error loading stats: {error}
       </div>
     );
@@ -84,12 +92,22 @@ export default function AdminPage() {
     <div className="min-h-screen bg-bg-base text-text-primary px-6 py-12 pb-20">
       <div className="mx-auto max-w-[860px]">
         {/* Header */}
-        <div className="mb-2 font-mono text-[12px] uppercase tracking-[0.08em] text-[#00C896]">
-          Admin
+        <div className="mb-9 flex items-start justify-between">
+          <div>
+            <div className="mb-2 font-mono text-[12px] uppercase tracking-[0.08em] text-[#00C896]">
+              Admin
+            </div>
+            <h1 className="font-serif text-[32px] text-text-primary font-normal">
+              Dashboard
+            </h1>
+          </div>
+          <button
+            onClick={handleLogout}
+            className="rounded-md border border-border-default px-4 py-2 font-sans text-[13px] font-medium text-text-secondary hover:bg-bg-elevated hover:text-text-primary transition-colors cursor-pointer"
+          >
+            Log out
+          </button>
         </div>
-        <h1 className="mb-9 font-serif text-[32px] text-text-primary font-normal">
-          Dashboard
-        </h1>
 
         {/* Stat Cards */}
         <div className="mb-12 grid grid-cols-[repeat(auto-fit,minmax(150px,1fr))] gap-3">
@@ -119,7 +137,7 @@ export default function AdminPage() {
           </h2>
 
           {stats.recentSnapshots.length === 0 ? (
-            <div className="rounded-lg border border-border-default p-6 text-center font-mono text-[12px] text-text-muted">
+            <div className="rounded-lg border border-border-default p-6 text-center font-sans text-[14px] text-text-muted">
               No snapshots yet
             </div>
           ) : (
@@ -132,10 +150,10 @@ export default function AdminPage() {
                   <span className="min-w-[100px] font-mono text-[13px] text-[#00C896]">
                     v{snapshot.version}
                   </span>
-                  <span className="flex-1 font-mono text-[11px] text-text-secondary">
+                  <span className="flex-1 font-sans text-[13px] text-text-secondary">
                     {snapshot.notes || "—"}
                   </span>
-                  <span className="whitespace-nowrap font-mono text-[11px] text-text-muted">
+                  <span className="whitespace-nowrap font-sans text-[12px] text-text-muted">
                     {new Date(snapshot.created_at).toLocaleDateString("en-US", {
                       month: "short",
                       day: "numeric",
@@ -154,7 +172,7 @@ export default function AdminPage() {
           </h2>
 
           <div className="rounded-lg border border-border-default bg-bg-surface p-5">
-            <div className="mb-3 font-mono text-[12px] text-text-secondary">
+            <div className="mb-3 font-sans text-[14px] text-text-secondary">
               Run this to trigger pricing change detection manually:
             </div>
 
@@ -164,7 +182,7 @@ export default function AdminPage() {
 
             <button
               onClick={handleCopy}
-              className={`rounded-md border border-border-default bg-transparent px-3 py-1.5 font-mono text-[12px] transition-colors cursor-pointer ${
+              className={`rounded-md border border-border-default bg-transparent px-3 py-1.5 font-sans text-[13px] font-medium transition-colors cursor-pointer ${
                 copied ? "text-[#00C896]" : "text-text-secondary"
               }`}
             >

@@ -1,24 +1,11 @@
 import { NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-
-function checkAuth(request: Request): boolean {
-  const authHeader = request.headers.get("authorization");
-  const adminPassword = process.env.ADMIN_PASSWORD;
-
-  if (!adminPassword || !authHeader) return false;
-
-  if (authHeader.startsWith("Basic ")) {
-    const base64 = authHeader.split(" ")[1];
-    const decoded = atob(base64);
-    const [user, pass] = decoded.split(":");
-    return user === "admin" && pass === adminPassword;
-  }
-
-  return false;
-}
+import { cookies } from "next/headers";
 
 export async function GET(request: Request) {
-  if (!checkAuth(request)) {
+  const sessionCookie = cookies().get("credex_admin_session");
+
+  if (!sessionCookie || sessionCookie.value !== "authenticated") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 

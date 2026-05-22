@@ -40,7 +40,7 @@ export default function UnsubscribedPage() {
           Unsubscribed
         </h1>
 
-        <p className="font-mono text-[13px] leading-relaxed text-text-secondary mb-8">
+        <p className="font-sans text-[15px] leading-relaxed text-text-secondary mb-8">
           You&apos;ve been removed from pricing change notifications.
           <br />
           Your audit is still saved and accessible.
@@ -48,7 +48,7 @@ export default function UnsubscribedPage() {
 
         <Link
           href="/"
-          className="font-mono text-[13px] text-[#00C896] no-underline border-b border-[#00C896]/30 pb-0.5 hover:border-[#00C896] transition-colors"
+          className="font-sans text-[14px] font-medium text-[#00C896] no-underline border-b border-[#00C896]/30 pb-0.5 hover:border-[#00C896] transition-colors"
         >
           ← Back to Credex
         </Link>

@@ -106,7 +106,7 @@ function DiffCard({ tool }: { tool: ToolDiff }) {
 
           {tool.old ? (
             <>
-              <div className="mb-2 inline-block rounded border border-border-default bg-bg-surface px-1.5 py-0.5 font-mono text-[11px] text-text-secondary">
+              <div className="mb-2 inline-block rounded border border-border-default bg-bg-surface px-1.5 py-0.5 font-sans text-[12px] font-medium text-text-secondary">
                 {tool.old.badge}
               </div>
               <div className="mb-2 font-serif text-[22px] text-text-primary">
@@ -115,12 +115,12 @@ function DiffCard({ tool }: { tool: ToolDiff }) {
                   /mo
                 </span>
               </div>
-              <div className="font-mono text-[11px] leading-relaxed text-text-muted">
+              <div className="font-sans text-[13px] leading-relaxed text-text-muted">
                 {tool.old.reason}
               </div>
             </>
           ) : (
-            <div className="font-mono text-[11px] italic text-text-muted">
+            <div className="font-sans text-[13px] italic text-text-muted">
               Not in original audit
             </div>
           )}
@@ -132,7 +132,7 @@ function DiffCard({ tool }: { tool: ToolDiff }) {
             Now
           </div>
 
-          <div className="mb-2 inline-block rounded border border-border-default bg-bg-surface px-1.5 py-0.5 font-mono text-[11px] text-text-secondary">
+          <div className="mb-2 inline-block rounded border border-border-default bg-bg-surface px-1.5 py-0.5 font-sans text-[12px] font-medium text-text-secondary">
             {tool.new.badge}
           </div>
           <div
@@ -173,7 +173,7 @@ function DiffCard({ tool }: { tool: ToolDiff }) {
             </div>
           )}
 
-          <div className="font-mono text-[11px] leading-relaxed text-text-secondary">
+          <div className="font-sans text-[13px] leading-relaxed text-text-secondary">
             {tool.new.reason}
           </div>
         </div>
@@ -234,12 +234,12 @@ export function DiffClient({ changedTools, sameTools, auditId }: DiffClientProps
         <div className="mb-2 font-sans text-[16px] font-medium text-text-primary">
           Want to start fresh with current pricing?
         </div>
-        <div className="mb-5 font-mono text-[12px] text-text-muted">
+        <div className="mb-5 font-sans text-[14px] text-text-muted">
           Your form data is saved. Re-run in under a minute.
         </div>
         <a
           href="/"
-          className="inline-block rounded-md bg-[#00C896] px-6 py-2.5 font-mono text-[13px] font-semibold text-white no-underline hover:bg-[#00C896]/90 shadow-sm hover:-translate-y-0.5 transition-all"
+          className="inline-block rounded-md bg-[#00C896] px-6 py-2.5 font-sans text-[14px] font-semibold text-white no-underline hover:bg-[#00C896]/90 shadow-sm hover:-translate-y-0.5 transition-all"
         >
           Run new audit →
         </a>
