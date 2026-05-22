@@ -31,6 +31,7 @@ export async function GET(request: Request) {
       input: data.input_data,
       result: data.result_data,
       createdAt: data.created_at,
+      reauditCount: data.reaudit_count,
     });
   } catch (e) {
     console.error("Get audit error:", e);

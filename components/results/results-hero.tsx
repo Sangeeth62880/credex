@@ -13,6 +13,7 @@ interface ResultsHeroProps {
   useCase: string;
   optimizedCount: number;
   actionableCount: number;
+  reauditCount?: number;
 }
 
 export default function ResultsHero({
@@ -23,6 +24,7 @@ export default function ResultsHero({
   useCase,
   optimizedCount,
   actionableCount,
+  reauditCount = 0,
 }: ResultsHeroProps) {
   const [count, setCount] = useState(0);
   const [isCopied, setIsCopied] = useState(false);
@@ -74,9 +76,19 @@ export default function ResultsHero({
         {/* Top row — headline + actions */}
         <div className="flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
           <div className="space-y-1">
-            <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-text-muted">
-              Audit Complete
-            </p>
+            <div className="flex items-center gap-2">
+              <p className="font-mono text-[11px] uppercase tracking-[0.2em] text-text-muted">
+                Audit Complete
+              </p>
+              {reauditCount > 0 && (
+                <>
+                  <span className="text-border-strong">•</span>
+                  <span className="rounded-full border border-border-subtle bg-bg-surface px-2 py-0.5 font-mono text-[10px] text-text-muted">
+                    Updated {reauditCount} time{reauditCount === 1 ? '' : 's'}
+                  </span>
+                </>
+              )}
+            </div>
             {hasSavings ? (
               <h1 className="savings-gradient font-serif text-[48px] md:text-[64px] leading-[1.05]">
                 {formatCurrency(count)}

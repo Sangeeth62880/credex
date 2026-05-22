@@ -17,7 +17,7 @@ function ResultsContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const id = searchParams.get("id");
-  const [data, setData] = useState<{ result: AuditResult } | null>(null);
+  const [data, setData] = useState<{ result: AuditResult, reauditCount?: number } | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -79,7 +79,7 @@ function ResultsContent() {
     );
   }
 
-  const { result } = data;
+  const { result, reauditCount } = data;
 
   // Split audits into actionable and optimal for visual grouping
   const actionableAudits = result.toolAudits.filter(a => a.monthlySavings > 0);
@@ -98,6 +98,7 @@ function ResultsContent() {
         useCase={result.formInput.useCase}
         optimizedCount={optimizedCount}
         actionableCount={actionableCount}
+        reauditCount={reauditCount}
       />
 
       {/* Main Content — full width, no sidebar */}
