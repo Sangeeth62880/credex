@@ -1,10 +1,16 @@
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY || "mock_key");
 
 export async function POST(request: Request) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
+  );
   try {
     const body = await request.json();
     const { email, auditId } = body;

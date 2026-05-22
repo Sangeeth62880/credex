@@ -1,8 +1,7 @@
 export const dynamic = "force-dynamic";
 
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
-import { supabaseAdmin } from "@/lib/supabase-admin";
+import { createClient } from "@supabase/supabase-js";
 import { getLatestPricingSnapshot, getPricingSnapshot } from "@/lib/pricing-snapshot";
 import { detectAffectedAudits } from "@/lib/detect-pricing-changes";
 import { sendPricingChangeNotification } from "@/lib/send-pricing-emails";
@@ -16,6 +15,15 @@ export async function POST(request: Request) {
 }
 
 async function handleDetectChanges(request: Request) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
+  );
+  const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
+    process.env.SUPABASE_SERVICE_ROLE_KEY || "",
+    { auth: { persistSession: false, autoRefreshToken: false } }
+  );
   try {
     const { searchParams } = new URL(request.url);
     const secret = searchParams.get("secret");

@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server";
 import { type AuditResult, type FormInput } from "@/lib/audit-engine";
 

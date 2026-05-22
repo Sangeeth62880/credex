@@ -1,7 +1,14 @@
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase-admin";
+import { createClient } from "@supabase/supabase-js";
 
 export async function POST(request: Request) {
+  const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
+    process.env.SUPABASE_SERVICE_ROLE_KEY || "",
+    { auth: { persistSession: false, autoRefreshToken: false } }
+  );
   try {
     const body = await request.json();
     const { auditId } = body;
