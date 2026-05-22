@@ -46,6 +46,10 @@ export async function POST(request: Request) {
             <br />
             <p>Best,</p>
             <p>The Credex Team</p>
+            <br />
+            <p style="font-size: 12px; color: #666;">
+              Manage pricing change notifications: <a href="${appUrl}/api/unsubscribe?email=${encodeURIComponent(email)}">${appUrl}/api/unsubscribe?email=${email}</a>
+            </p>
           </div>
         `,
       });
