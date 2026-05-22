@@ -11,14 +11,13 @@ interface DiffPageProps {
 export async function generateMetadata({
   params,
 }: DiffPageProps): Promise<Metadata> {
-  const diff = await getAuditDiff(params.id);
-  if (!diff) {
-    return { title: "Audit diff — not found" };
-  }
-  const sign = diff.savingsDelta >= 0 ? "+" : "";
   return {
-    title: `Audit diff — ${sign}$${Math.abs(diff.savingsDelta).toFixed(0)}/mo change`,
-    description: "Compare your original audit against updated pricing",
+    title: 'Pricing update — your AI spend audit',
+    description: 'See how recent pricing changes affect your AI tool recommendations.',
+    openGraph: {
+      title: 'Pricing update — your AI spend audit',
+      description: 'See how recent pricing changes affect your AI tool recommendations.',
+    }
   };
 }
 
@@ -34,8 +33,26 @@ export default async function DiffPage({ params }: DiffPageProps) {
     toolDiffs,
     savingsDelta,
     snapshotVersion,
+    hasSnapshot,
     createdAt,
   } = diff;
+
+  if (!hasSnapshot) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-bg-base px-6 text-center text-text-primary">
+        <h1 className="mt-6 font-serif text-[32px]">Pricing tracking not enabled</h1>
+        <p className="mt-2 max-w-md font-sans text-[16px] text-text-secondary">
+          This audit was created before pricing tracking was enabled. Run a new audit to enable pricing change notifications.
+        </p>
+        <a
+          href="/"
+          className="mt-8 inline-flex h-10 items-center justify-center rounded-md bg-accent px-8 font-sans text-[14px] font-semibold text-text-inverse hover:bg-accent-hover transition-colors"
+        >
+          Run new audit →
+        </a>
+      </div>
+    );
+  }
 
   const changedTools = toolDiffs.filter((t) => t.status !== "same");
   const sameTools = toolDiffs.filter((t) => t.status === "same");
@@ -58,7 +75,7 @@ export default async function DiffPage({ params }: DiffPageProps) {
       <header className="border-b border-border-subtle px-6 py-8">
         <div className="mx-auto max-w-[960px]">
           {/* Breadcrumb */}
-          <div className="mb-5 flex items-center gap-2 font-mono text-[13px]">
+          <div className="mb-5 flex items-center gap-2 font-sans text-[14px]">
             <a href={`/audit/results?id=${params.id}`} className="text-text-muted no-underline hover:text-text-primary transition-colors">
               ← Original audit
             </a>
@@ -67,7 +84,7 @@ export default async function DiffPage({ params }: DiffPageProps) {
           </div>
 
           {/* Warning badge */}
-          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-warning/30 bg-warning-bg px-3.5 py-1.5 font-mono text-[12px] text-warning">
+          <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-warning/30 bg-warning-bg px-3.5 py-1.5 font-sans text-[13px] font-medium text-warning">
             <svg
               width="16"
               height="16"
@@ -160,7 +177,7 @@ export default async function DiffPage({ params }: DiffPageProps) {
           </div>
 
           {/* Version info */}
-          <div className="mt-5 font-mono text-[11px] text-text-muted">
+          <div className="mt-5 font-sans text-[13px] text-text-muted">
             Audit created: {formattedDate} · Pricing: {snapshotVersion} → current ({PRICING_VERSION})
           </div>
         </div>

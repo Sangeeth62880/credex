@@ -31,6 +31,7 @@ export interface AuditDiffView {
   toolDiffs: ToolDiff[];
   savingsDelta: number;
   snapshotVersion: string;
+  hasSnapshot: boolean;
   createdAt: string;
 }
 
@@ -116,6 +117,7 @@ export async function getAuditDiff(
       toolDiffs,
       savingsDelta,
       snapshotVersion,
+      hasSnapshot: !!audit.pricing_snapshot_id,
       createdAt: audit.created_at,
     };
   } catch (err) {
