@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabaseAdmin } from "@/lib/supabase-admin";
+import { createClient } from "@supabase/supabase-js";
 import { PRICING_DATA, PRICING_VERSION } from "@/lib/pricing-data";
 import { clearSnapshotCache } from "@/lib/pricing-snapshot";
 
@@ -19,7 +19,20 @@ function checkAuth(request: Request): boolean {
   return false;
 }
 
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: Request) {
+  const supabaseAdmin = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
+    process.env.SUPABASE_SERVICE_ROLE_KEY || "",
+    {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    }
+  );
+
   if (!checkAuth(request)) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
