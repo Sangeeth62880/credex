@@ -114,3 +114,25 @@ curl step — the run block needs consistent 2-space indent or it silently
 fails. Fixed after reading the Actions error log. Manual workflow_dispatch
 trigger confirmed working. Pushed Day 2. End of session.
 
+
+## 2026-05-22 09:00 — Day 3 start
+All Day 2 features confirmed working on deployed URL. Navigated through
+the full pipeline manually: submitted audit → triggered detect-changes →
+checked /audit/[id]/diff → verified /changes and /admin load correctly.
+Today: small improvements identified from testing, final docs, open PR.
+Hours worked: 0
+
+## 2026-05-22 10:00 — Small improvements from testing
+Found three things worth fixing before PR:
+1. Audits without pricing_snapshot_id (pre-Round-2) crashed the diff page
+   — added graceful fallback message instead.
+2. Lead confirmation email had no unsubscribe link — added one-liner.
+3. Results page didn't surface reaudit_count — added badge.
+Also added og metadata to diff page.
+Hours worked: 1.5
+
+## 2026-05-22 12:00 — Final verification
+Ran full end-to-end test manually (see ROUND2_PR.md "How to test").
+npm run build: clean. npx tsc --noEmit: zero errors.
+All routes reachable from UI. PR opened.
+Hours worked: 1
