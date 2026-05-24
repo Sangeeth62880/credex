@@ -71,7 +71,26 @@ const TOOL_NAMES: Record<string, string> = {
 
 // ─── Main Audit Engine ────────────────────────────────────────────────────────
 
-export function runAudit(input: FormInput): AuditResult {
+export function runAudit(input: FormInput, pricingData?: any[]): AuditResult {
+  const getPlanPrice = (toolId: string, planName: string, defaultPrice: number): number => {
+    if (!pricingData) return defaultPrice;
+    const toolMap: Record<string, string> = {
+      'cursor': 'Cursor',
+      'github-copilot': 'GitHub Copilot',
+      'claude': 'Claude',
+      'chatgpt': 'ChatGPT',
+      'gemini': 'Gemini',
+      'windsurf': 'Windsurf',
+      'anthropic-api': 'Anthropic API',
+      'openai-api': 'OpenAI API'
+    };
+    const toolName = toolMap[toolId] || toolId;
+    const tool = pricingData.find(t => t.tool.toLowerCase() === toolName.toLowerCase());
+    if (!tool) return defaultPrice;
+    const plan = tool.plans.find((p: any) => p.name.toLowerCase() === planName.toLowerCase());
+    return plan ? plan.pricePerUser : defaultPrice;
+  };
+
   const activeTools = input.tools.filter(t => t.monthlySpend > 0);
   const toolAudits: ToolAudit[] = [];
   const processedToolIds = new Set<string>();
@@ -80,52 +99,60 @@ export function runAudit(input: FormInput): AuditResult {
   for (const tool of activeTools) {
     let audit: Partial<ToolAudit> | null = null;
 
-    // GitHub Copilot Business ($19/seat) with seats ≤ 3 AND useCase includes coding
+    // GitHub Copilot Business with seats ≤ 3 AND useCase includes coding
     if (tool.id === 'github-copilot' && tool.plan === 'Business' && tool.seats <= 3 && input.useCase.toLowerCase().includes('coding')) {
-      const savings = (19 - 10) * tool.seats;
+      const priceBusiness = getPlanPrice('github-copilot', 'Business', 19);
+      const priceIndividual = getPlanPrice('github-copilot', 'Individual', 10);
+      const savings = (priceBusiness - priceIndividual) * tool.seats;
       audit = {
         recommendedAction: 'downgrade',
         recommendedPlan: 'Individual',
-        estimatedMonthlyCost: 10 * tool.seats,
+        estimatedMonthlyCost: priceIndividual * tool.seats,
         monthlySavings: savings,
         reason: `Copilot Business adds SSO and policy controls; teams under 4 users rarely need these. Individual saves ${formatCurrency(savings)}/month with identical AI features.`,
         badge: 'DOWNGRADE PLAN',
       };
     }
 
-    // Claude Team ($30/seat) with seats ≤ 2
+    // Claude Team with seats ≤ 2
     else if (tool.id === 'claude' && tool.plan === 'Team' && tool.seats <= 2) {
-      const savings = (30 * tool.seats) - (20 * tool.seats);
+      const priceTeam = getPlanPrice('claude', 'Team', 30);
+      const pricePro = getPlanPrice('claude', 'Pro', 20);
+      const savings = (priceTeam * tool.seats) - (pricePro * tool.seats);
       audit = {
         recommendedAction: 'downgrade',
         recommendedPlan: 'Pro',
-        estimatedMonthlyCost: 20 * tool.seats,
+        estimatedMonthlyCost: pricePro * tool.seats,
         monthlySavings: savings,
-        reason: `Claude Team is priced for collaboration features at 3+ seats. At ${tool.seats} user(s), ${tool.seats === 1 ? 'a Pro plan costs' : 'two Pro plans cost'} ${formatCurrency(20 * tool.seats)}/month vs ${formatCurrency(30 * tool.seats)} for Team.`,
+        reason: `Claude Team is priced for collaboration features at 3+ seats. At ${tool.seats} user(s), ${tool.seats === 1 ? 'a Pro plan costs' : 'two Pro plans cost'} ${formatCurrency(pricePro * tool.seats)}/month vs ${formatCurrency(priceTeam * tool.seats)} for Team.`,
         badge: 'DOWNGRADE PLAN',
       };
     }
 
-    // ChatGPT Team ($30/seat) with seats === 1
+    // ChatGPT Team with seats === 1
     else if (tool.id === 'chatgpt' && tool.plan === 'Team' && tool.seats === 1) {
-      const savings = 10;
+      const priceTeam = getPlanPrice('chatgpt', 'Team', 30);
+      const pricePlus = getPlanPrice('chatgpt', 'Plus', 20);
+      const savings = priceTeam - pricePlus;
       audit = {
         recommendedAction: 'downgrade',
         recommendedPlan: 'Plus',
-        estimatedMonthlyCost: 20,
-        monthlySavings: 10,
+        estimatedMonthlyCost: pricePlus,
+        monthlySavings: savings,
         reason: "ChatGPT Team adds admin controls and shared workspaces. A solo user gets identical model access on Plus for $10/month less.",
         badge: 'DOWNGRADE PLAN',
       };
     }
 
-    // Cursor Business ($40/seat) with seats ≤ 2 AND useCase === 'writing'
+    // Cursor Business with seats ≤ 2 AND useCase === 'writing'
     else if (tool.id === 'cursor' && tool.plan === 'Business' && tool.seats <= 2 && input.useCase.toLowerCase() === 'writing') {
-      const savings = 20 * tool.seats;
+      const priceBusiness = getPlanPrice('cursor', 'Business', 40);
+      const pricePro = getPlanPrice('cursor', 'Pro', 20);
+      const savings = (priceBusiness - pricePro) * tool.seats;
       audit = {
         recommendedAction: 'downgrade',
         recommendedPlan: 'Pro',
-        estimatedMonthlyCost: 20 * tool.seats,
+        estimatedMonthlyCost: pricePro * tool.seats,
         monthlySavings: savings,
         reason: `Cursor Business adds centralized billing and audit logs. Writing-focused teams of ${tool.seats} don't use these. Pro covers all AI features at half the price.`,
         badge: 'DOWNGRADE PLAN',

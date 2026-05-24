@@ -69,3 +69,56 @@ The audit generates a comprehensive report featuring a **Global AI Benchmark**, 
 ## 🌐 Deployment
 The app is optimized for Vercel. 
 **Deployed URL**: https://credex-two-beige.vercel.app/
+
+---
+
+## Round 2 — Re-audit on Pricing Change
+
+### What was added
+
+The Round 1 tool gave a one-time audit. Round 2 makes audits persistent
+and live — users are notified when pricing changes invalidate their results.
+
+**New features:**
+- **Persistent audit storage** — every audit saves the pricing snapshot
+  used at the time, so changes can be detected later
+- **Pricing-change detection** — a detection engine compares stored 
+  pricing snapshots against current pricing and flags affected audits
+- **Email notifications** — affected users receive a consolidated email
+  (one per user, not per audit) with what changed and a re-audit link
+- **Diff view** — `/audit/[id]/diff` shows old vs new recommendations
+  side by side with a savings delta headline
+- **One-click unsubscribe** — `/api/unsubscribe?email=` opts users out
+- **Pricing history** — `/changes` shows all pricing versions tracked
+- **Admin dashboard** — `/admin` shows total audits, emails sent, 
+  click-through rates, and a manual detection trigger
+
+### New routes
+
+| Route | Description |
+|-------|-------------|
+| `/audit/[id]/diff` | Before/after diff view for a re-audited result |
+| `/changes` | Public pricing change history |
+| `/admin` | Admin dashboard (HTTP Basic auth) |
+| `/api/detect-changes` | POST — triggers pricing change detection |
+| `/api/unsubscribe` | GET — one-click email unsubscribe |
+| `/api/track-reaudit-click` | POST — tracks diff view click-throughs |
+
+### How to trigger pricing change detection manually
+
+  curl -X POST https://credex-two-beige.vercel.app/api/detect-changes \
+    -H "Authorization: Bearer YOUR_CRON_SECRET" \
+    -H "Content-Type: application/json" \
+    -d '{}'
+
+### New environment variables required
+
+  SUPABASE_SERVICE_ROLE_KEY=   # For admin Supabase operations
+  CRON_SECRET=                 # Protects the detect-changes endpoint
+  NEXT_PUBLIC_APP_URL=         # Full deployed URL for email links
+  ADMIN_PASSWORD=              # HTTP Basic auth for /admin
+
+### Automated scheduling
+
+A GitHub Actions workflow runs pricing detection daily at 09:00 UTC.
+Manual trigger also available via the Actions tab on the repository.

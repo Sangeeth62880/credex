@@ -140,7 +140,7 @@ export default function AuditDetailsPage() {
                     className={cn(
                       "rounded-lg px-4 py-2 font-sans text-[14px] transition-all duration-150 border",
                       state.useCase === useCase
-                        ? "bg-accent-dim border-accent text-accent shadow-[0_0_12px_rgba(0,200,150,0.1)]"
+                        ? "bg-accent-dim border-accent text-accent"
                         : "bg-bg-surface border-border-default text-text-secondary hover:border-border-strong hover:bg-bg-elevated"
                     )}
                   >
@@ -164,7 +164,7 @@ export default function AuditDetailsPage() {
             <Button
               onClick={handleRunAudit}
               disabled={!isStep2Valid || isLoading}
-              className="h-12 rounded-md bg-accent px-8 font-sans text-[14px] font-semibold text-text-inverse hover:bg-accent-hover disabled:bg-bg-elevated disabled:text-text-muted shadow-[0_4px_12px_rgba(0,200,150,0.2)]"
+              className="h-12 rounded-md bg-accent px-8 font-sans text-[14px] font-semibold text-text-inverse hover:bg-accent-hover disabled:bg-bg-elevated disabled:text-text-muted shadow-sm"
             >
               {isLoading ? (
                 <>

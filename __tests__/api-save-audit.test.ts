@@ -10,8 +10,8 @@ const mockSelect = jest.fn();
 const mockSingle = jest.fn();
 const mockFrom = jest.fn();
 
-jest.mock("@/lib/supabase", () => ({
-  supabase: {
+jest.mock("@supabase/supabase-js", () => ({
+  createClient: jest.fn(() => ({
     from: (...args: any[]) => {
       mockFrom(...args);
       return {
@@ -28,7 +28,7 @@ jest.mock("@/lib/supabase", () => ({
         },
       };
     },
-  },
+  })),
 }));
 
 import { POST } from "../app/api/save-audit/route";
@@ -137,6 +137,7 @@ describe("/api/save-audit", () => {
         input_data: VALID_INPUT,
         result_data: VALID_RESULT,
         total_monthly_savings: VALID_RESULT.totalMonthlySavings,
+        pricing_snapshot_id: "00000000-0000-0000-0000-000000000000",
       },
     ]);
 

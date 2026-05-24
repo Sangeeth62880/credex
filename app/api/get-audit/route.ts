@@ -1,15 +1,26 @@
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@supabase/supabase-js";
 
 export async function GET(request: Request) {
-  const { searchParams } = new URL(request.url);
-  const id = searchParams.get("id");
-
-  if (!id) {
-    return NextResponse.json({ error: "Missing audit ID" }, { status: 400 });
-  }
-
   try {
+    const { searchParams } = new URL(request.url)
+    const id = searchParams.get('id')
+
+    if (!id) {
+      return new Response(
+        JSON.stringify({ error: 'Missing audit ID' }),
+        { status: 400, headers: { 'Content-Type': 'application/json' } }
+      )
+    }
+
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
+    );
+
+
     if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
       return NextResponse.json({ error: "Supabase not configured" }, { status: 500 });
     }
@@ -29,9 +40,12 @@ export async function GET(request: Request) {
       input: data.input_data,
       result: data.result_data,
       createdAt: data.created_at,
+      reauditCount: data.reaudit_count,
     });
-  } catch (e) {
-    console.error("Get audit error:", e);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+  } catch (error) {
+    return new Response(
+      JSON.stringify({ error: 'Invalid request' }),
+      { status: 400, headers: { 'Content-Type': 'application/json' } }
+    )
   }
 }

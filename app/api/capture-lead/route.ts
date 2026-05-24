@@ -1,10 +1,16 @@
+export const dynamic = "force-dynamic";
+
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@supabase/supabase-js";
 import { Resend } from "resend";
 
 const resend = new Resend(process.env.RESEND_API_KEY || "mock_key");
 
 export async function POST(request: Request) {
+  const supabase = createClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL || "https://placeholder.supabase.co",
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ""
+  );
   try {
     const body = await request.json();
     const { email, auditId } = body;
@@ -31,19 +37,25 @@ export async function POST(request: Request) {
       console.warn("Resend not configured, skipping email send");
       isMock = true;
     } else {
+      const fromEmail = process.env.RESEND_FROM_EMAIL || "onboarding@resend.dev";
+      const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
       const { error } = await resend.emails.send({
-        from: "Credex Audit <audit@credex.com>", // Replace with verified domain in production
+        from: `Credex Audit <${fromEmail}>`, // Fallback to onboarding@resend.dev in local development
         to: [email],
         subject: "Your AI Spend Audit Results",
         html: `
           <div>
             <h1>Your AI Spend Audit is ready!</h1>
             <p>Thank you for using the Credex AI Spend Audit tool.</p>
-            ${auditId ? `<p>You can review your results anytime at: <a href="https://credex.com/audit/results?id=${auditId}">Your Audit Link</a></p>` : ""}
+            ${auditId ? `<p>You can review your results anytime at: <a href="${appUrl}/audit/results?id=${auditId}">Your Audit Link</a></p>` : ""}
             <p>If you're ready to capture these savings, reply to this email to talk to our team.</p>
             <br />
             <p>Best,</p>
             <p>The Credex Team</p>
+            <br />
+            <p style="font-size: 12px; color: #666;">
+              Manage pricing change notifications: <a href="${appUrl}/api/unsubscribe?email=${encodeURIComponent(email)}">${appUrl}/api/unsubscribe?email=${email}</a>
+            </p>
           </div>
         `,
       });

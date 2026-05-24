@@ -70,7 +70,7 @@ export const TOOLS: ToolDefinition[] = [
   {
     id: 'gemini',
     name: 'Gemini',
-    logoSrc: '/logos/google.svg',
+    logoSrc: '/logos/gemini-color.svg',
     plans: [
       { label: 'Free', pricePerSeat: 0 },
       { label: 'Advanced', pricePerSeat: 20 },

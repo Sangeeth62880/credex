@@ -8,8 +8,8 @@
 const mockLeadInsert = jest.fn();
 const mockLeadFrom = jest.fn();
 
-jest.mock("@/lib/supabase", () => ({
-  supabase: {
+jest.mock("@supabase/supabase-js", () => ({
+  createClient: jest.fn(() => ({
     from: (...args: any[]) => {
       mockLeadFrom(...args);
       return {
@@ -19,7 +19,7 @@ jest.mock("@/lib/supabase", () => ({
         },
       };
     },
-  },
+  })),
 }));
 
 // Mock Resend

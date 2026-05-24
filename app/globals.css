@@ -5,61 +5,61 @@
 /* ─── Design Tokens ────────────────────────────────────────────────────────── */
 
 :root {
-  /* Backgrounds — layered depth */
-  --bg-base:        #0A0B0D;
-  --bg-surface:     #111318;
-  --bg-elevated:    #1A1D24;
-  --bg-overlay:     #21252E;
+  /* Backgrounds */
+  --bg-base:        #FFFFFF;
+  --bg-surface:     #F8FAFC; /* Slate 50 */
+  --bg-elevated:    #F1F5F9; /* Slate 100 */
+  --bg-overlay:     #E2E8F0; /* Slate 200 */
 
-  /* Borders */
-  --border-subtle:  #1E2229;
-  --border-default: #2A2F3A;
-  --border-strong:  #3D4455;
+  /* Borders — distinct slate boundaries for contrast */
+  --border-subtle:  #E2E8F0; /* Slate 200 */
+  --border-default: #CBD5E1; /* Slate 300 */
+  --border-strong:  #94A3B8; /* Slate 400 */
 
-  /* Text */
-  --text-primary:   #F0F2F5;
-  --text-secondary: #8B92A5;
-  --text-muted:     #4E5568;
-  --text-inverse:   #0A0B0D;
+  /* Text — deep slate for maximum readability */
+  --text-primary:   #0F172A; /* Slate 900 */
+  --text-secondary: #334155; /* Slate 700 */
+  --text-muted:     #64748B; /* Slate 500 */
+  --text-inverse:   #FFFFFF;
 
-  /* Accent — Credex Green */
-  --accent:         #00C896;
-  --accent-dim:     rgba(0, 200, 150, 0.094);
-  --accent-hover:   #00E5AD;
+  /* Accent — Emerald for high contrast primary actions */
+  --accent:         #059669; /* Emerald 600 */
+  --accent-dim:     #D1FAE5; /* Emerald 100 */
+  --accent-hover:   #047857; /* Emerald 700 */
 
   /* Semantic */
-  --positive:       #00C896;
-  --positive-bg:    rgba(0, 200, 150, 0.063);
-  --warning:        #F5A623;
-  --warning-bg:     rgba(245, 166, 35, 0.063);
-  --negative:       #FF5C5C;
-  --negative-bg:    rgba(255, 92, 92, 0.063);
-  --neutral:        #8B92A5;
+  --positive:       #15803D; /* Green 700 */
+  --positive-bg:    #DCFCE7; /* Green 100 */
+  --warning:        #B45309; /* Amber 700 */
+  --warning-bg:     #FEF3C7; /* Amber 100 */
+  --negative:       #B91C1C; /* Red 700 */
+  --negative-bg:    #FEE2E2; /* Red 100 */
+  --neutral:        #475569; /* Slate 600 */
 
-  /* Special — Credex CTA */
-  --credex-cta-bg:     #0D1F18;
-  --credex-cta-border: rgba(0, 200, 150, 0.25);
+  /* Special */
+  --credex-cta-bg:     #D1FAE5;
+  --credex-cta-border: #059669;
 
   /* ── shadcn/ui compatibility layer ── */
-  --background:             10 12% 4%;
-  --foreground:             220 14% 96%;
-  --card:                   220 12% 8%;
-  --card-foreground:        220 14% 96%;
-  --popover:                220 14% 10%;
-  --popover-foreground:     220 14% 96%;
-  --primary:                163 100% 39%;
-  --primary-foreground:     220 12% 4%;
-  --secondary:              220 12% 12%;
-  --secondary-foreground:   220 14% 96%;
-  --muted:                  222 12% 12%;
-  --muted-foreground:       222 14% 59%;
-  --accent-shadcn:          163 100% 39%;
-  --accent-foreground:      220 12% 4%;
+  --background:             0 0% 100%;
+  --foreground:             192 31% 18%;
+  --card:                   156 46% 97%;
+  --card-foreground:        192 31% 18%;
+  --popover:                0 0% 100%;
+  --popover-foreground:     192 31% 18%;
+  --primary:                154 94% 51%;
+  --primary-foreground:     192 31% 18%;
+  --secondary:              156 46% 97%;
+  --secondary-foreground:   192 31% 18%;
+  --muted:                  192 15% 93%;
+  --muted-foreground:       192 13% 53%;
+  --accent-shadcn:          154 94% 51%;
+  --accent-foreground:      192 31% 18%;
   --destructive:            0 72% 51%;
-  --destructive-foreground: 220 14% 96%;
-  --border:                 222 14% 18%;
-  --input:                  222 14% 18%;
-  --ring:                   163 100% 39%;
+  --destructive-foreground: 0 0% 100%;
+  --border:                 192 31% 18% / 15%;
+  --input:                  192 31% 18% / 15%;
+  --ring:                   154 94% 51%;
   --radius:                 0.5rem;
 }
 
@@ -190,14 +190,14 @@ input[type="number"] {
 
 @layer utilities {
   .savings-gradient {
-    background: linear-gradient(135deg, #00C896, #00E5AD);
+    background: linear-gradient(135deg, #0F172A 20%, #059669 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
   .hero-glow {
-    background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(13, 31, 24, 0.6) 0%, transparent 70%);
+    background: radial-gradient(ellipse 80% 50% at 50% 0%, rgba(207, 253, 234, 0.4) 0%, transparent 70%);
   }
 }
 

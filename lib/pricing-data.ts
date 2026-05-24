@@ -14,6 +14,8 @@ export type PlanTier = {
   features: string[];
 };
 
+export const PRICING_VERSION = "2026-05-21";
+
 export type ToolPricing = {
   tool: string;
   category: ("coding" | "writing" | "data" | "research" | "mixed")[];
@@ -39,7 +41,7 @@ export const PRICING_DATA: ToolPricing[] = [
       },
       {
         name: "Pro",
-        pricePerUser: 20,
+        pricePerUser: 25,
         maxSeats: 10,
         features: ["Unlimited completions", "500 fast premium requests"],
       },
